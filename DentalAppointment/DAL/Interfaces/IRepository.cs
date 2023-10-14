@@ -1,6 +1,6 @@
 ﻿namespace DAL.Interfaces;
 
-public interface IRepository<T> where T : class
+public interface IRepository<T>
 {
     public List<T> GetAll();
     public void Add(T item);

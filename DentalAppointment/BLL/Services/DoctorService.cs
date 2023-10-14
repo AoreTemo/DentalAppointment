@@ -1,10 +1,14 @@
-﻿using DAL.Repositories;
+﻿using System.Linq.Expressions;
+using BLL.Interface;
+using Core.Models;
+using DAL.Interfaces;
+using DAL.Repositories;
 
 namespace BLL.Services;
 
-public class DoctorService : GenericService<Doctor>
+public class DoctorService : GenericService<Doctor>, IDoctorService
 {
-    protected DoctorService(UnitOfWork unitOfWork) : base(unitOfWork)
+    public  DoctorService(IRepository<Doctor> repository) : base(repository)
     {
     }
 }

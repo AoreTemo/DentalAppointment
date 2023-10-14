@@ -1,19 +1,19 @@
 ﻿using DAL.Interfaces;
 using DAL.Repositories;
 using System.Linq.Expressions;
+using BLL.Interface;
 
 namespace BLL.Services;
 
-public class GenericService<T> : IGenericService<T> where T : class
+public abstract class GenericService<T> : IGenericService<T>
 {
-    protected UnitOfWork _unitOfWork;
     protected IRepository<T> _repository;
 
-    protected GenericService(UnitOfWork unitOfWork)
+    protected GenericService(IRepository<T> repository)
     {
-        _unitOfWork = unitOfWork;
-        _repository = unitOfWork.GetRepository<T>();
+        _repository = repository;
     }
+    
 
     public T? GetById(int id)
     {
