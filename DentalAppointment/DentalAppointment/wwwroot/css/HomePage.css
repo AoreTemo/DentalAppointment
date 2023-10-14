@@ -1,0 +1,142 @@
+﻿.header-container {
+    background-color: #CC77F4
+}
+
+.nav-item {
+    font-size: 24px;
+    font-family: "Anonymous Pro";
+}
+
+.nav-item-greeting {
+    font-size: 14px;
+    font-family: "Anonymous Pro";
+}
+
+.Tooth-header {
+    width: 50%;
+}
+.nav-link-but {
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    font-size: 24px;
+    font-family: "Anonymous Pro";
+    background-color: #C0C0C0;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.nav-link-but:hover{
+    background-color: #f2837c;
+}
+
+main{
+    margin:0;
+    background-color: #F0F0F0;
+}
+
+.Gallery{
+    width: 100%;
+    padding: 100px 0;
+}
+
+.Gallery-title{
+    margin-bottom: 50px;
+    font-size: 48px;
+    font-family: "Anonymous Pro";
+    font-weight: 700;
+    text-align: center;
+}
+
+.My-container{
+    display:flex;
+    height: 100vh;
+    align-items:center;
+    justify-content:center;
+ /*   perspective: 90rem;
+    perspective-origin: 30%,60%;*/
+}
+.div-transform{
+    display:flex;
+/*    transform: rotateX(10deg) rotateY(15deg) rotateZ(-9deg) scale3d(1,1,-0.9)
+    scale(1.1) translateX(50px);*/
+}
+.card {
+    background: url("https://img.freepik.com/free-vector/gradient-trendy-background_23-2150461016.jpg") center;
+    color: #ffffff;
+    border-radius: 8px;
+    padding: 0,18px;
+    width: 244px;
+    transition: 0.5s ease;
+    overflow: hidden;
+    transform: translate(0);
+    position: relative;
+}
+
+    .card::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        z-index: -1;
+        width: 100%;
+        height: 100%;
+        opacity: 0.85;
+        padding-right: 60px
+    }
+
+.card h2{
+    text-transform: capitalize;
+}
+
+.card h4{
+    text-transform: uppercase;
+    letter-spacing: 4px;
+    margin-top: 48px;
+}
+
+.card-1{
+    background-size: cover;
+    transform: scale(1.02);
+   /* margin-right: 40px;*/
+}
+
+.card-1:hover{
+    transform: scale(1.11);
+    box-shadow: -7px 4px 28px -3px #b527cf;
+}
+
+    .card-1::before {
+        background: linear-gradient(90deg,#b527cf 0%,#3546f0 100%);
+    }
+
+.Gallery-container {
+    display: flex;
+    max-width: 860px;
+    margin-left: auto;
+    padding-right: 30px;
+    border:none;
+    border-radius: 5px;
+}
+
+.box{
+    display: flex;
+    flex: 1;
+    transition: 0.5s;
+}
+
+.box img{
+    transition: 0.5s;
+    width: 100%;
+    height: 512px;
+    object-fit:cover;
+    filter:grayscale(1);
+}
+
+.box:hover{
+    flex: 3;
+}
+
+.box:hover img{
+    filter: grayscale(0);
+}

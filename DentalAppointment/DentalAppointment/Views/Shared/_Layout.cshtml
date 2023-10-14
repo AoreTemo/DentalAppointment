@@ -12,12 +12,18 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/DentalAppointment.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/HomePage.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Anonymous+Pro&family=Inter:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <header>
+    <header class="header">
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">DentalAppointment</a>
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">
+                    <img src="photos/Tooth.png" class="Tooth-header" />
+                </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -31,14 +37,10 @@
                     <ul class="navbar-nav">
                         @if (SignInManager.IsSignedIn(User))
                         {
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="LogOut">LogOut</a>
-                            </li>
-
-                            <li calss="nav-item">
-                                <a class="nav-link text-dark greeting" href="#">
-                                    Hello, @UserManager.GetUserName(User)
-                               </a>
+                            <li class="nav-item-button">
+                                <form asp-area="" asp-controller="Account" asp-action="LogOut" method="get">
+                                    <button type="submit" class="nav-link-but">LogOut</button>
+                                </form>
                             </li>
                         }
                         else
@@ -55,11 +57,32 @@
             </div>
         </nav>
     </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
-    </div>
+    <main role="main" class="pb-3">
+        @RenderBody()
+        <section class="Gallery">
+            <h1 class="Gallery-title">Welcome to the Dental clinic</h1>
+            <div class="Gallery-container">
+                <div class="box">
+                    <img src="photos/gallery-1.jpg" alt="photo" />
+                </div>
+                <div class="box">
+                    <img src="photos/gallery-2.jpg" alt="photo" />
+                </div>
+                <div class="box">
+                    <img src="photos/gallery-3.jpg" alt="photo" />
+                </div>
+            </div>
+                <div class="div-transform">
+                    <div class="card card-1">
+                        <h2>Lorem ipsum dolor sit amet</h2>
+                        <p>
+                         жопа пися кака
+                        </p>
+                        <h4>Element</h4>
+                    </div>
+                </div>
+        </section>
+    </main>
 
     <footer class="border-top footer text-muted">
         <div class="container">
