@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace DAL.Interfaces;
 
-namespace DAL.Interfaces
+public interface IRepository<T> where T : class
 {
-    internal class IRepository
-    {
-    }
+    public List<T> GetAll();
+    public void Add(T item);
+    public T? FindById(int id);
 }
