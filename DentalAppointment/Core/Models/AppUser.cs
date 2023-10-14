@@ -9,4 +9,6 @@ public class AppUser : IdentityUser
     public int Age { get; set; }
     public string Email { get; set; }
     public string Password { get; set; }
+
+    public virtual ICollection<Appointment> Appointments { get; set; }
 }

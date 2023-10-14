@@ -1,4 +1,6 @@
-﻿namespace DAL.Repositories;
+﻿using DAL.Interfaces;
+
+namespace DAL.Repositories;
 
 public class UnitOfWork : IUnitOfWork
 {

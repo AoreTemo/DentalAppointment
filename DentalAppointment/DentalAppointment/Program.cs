@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 var builder = WebApplication.CreateBuilder(args);
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultString");
+
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
@@ -16,7 +17,6 @@ builder.Services.AddDbContext<ApplicationDbContext>(
 );
 builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
-
 
 builder.Services.AddIdentity<AppUser, IdentityRole>()
     .AddDefaultTokenProviders()
