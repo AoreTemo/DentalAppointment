@@ -20,7 +20,7 @@ public class AppContextFactory : IDesignTimeDbContextFactory<ApplicationDbContex
         builder.SetBasePath(Directory.GetCurrentDirectory());
         builder.AddJsonFile(Path.Combine(Directory.GetCurrentDirectory(), "appsettings.json"));
         var config = builder.Build();
-        var connectionString = config.GetConnectionString("DefaultConnection");
+        var connectionString = config.GetConnectionString("DefaultString");
 
         var optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
         optionsBuilder.UseSqlServer(connectionString);

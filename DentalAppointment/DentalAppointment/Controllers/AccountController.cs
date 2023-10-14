@@ -77,7 +77,10 @@ public class AccountController : Controller
     [HttpPost]
     public async Task<IActionResult> Register(RegisterViewModel registerViewModel)
     {
-        if (!ModelState.IsValid) return View(registerViewModel);
+        if (!ModelState.IsValid)
+        {
+            return View(registerViewModel);
+        }
 
         var user = await _userManager.FindByEmailAsync(registerViewModel.Email);
         
@@ -91,24 +94,32 @@ public class AccountController : Controller
 
         var newUser = new AppUser
         {
+            FirstName = registerViewModel.FirstName,
+            LastName = registerViewModel.LastName,
+            Age = registerViewModel.Age,
             UserName = registerViewModel.Email,
             Email = registerViewModel.Email,
             Role = UserRole.Client
         };
         var newUserResponse = await _userManager.CreateAsync(newUser, registerViewModel.Password);
 
-        
         if (!await _roleManager.RoleExistsAsync(UserRole.Client.ToString()))
-            await _roleManager.CreateAsync(new IdentityRole(UserRole.Client.ToString()));
-
-        if (!newUserResponse.Succeeded)
         {
-            var roleResult = await _userManager.AddToRoleAsync(newUser, UserRole.Client.ToString());
-
-            if(roleResult.Succeeded) return View("Error");
+            await _roleManager.CreateAsync(new IdentityRole(UserRole.Client.ToString()));
         }
 
-        return View("~/Views/Home/Index.cshtml");
+        if (newUserResponse.Succeeded)
+        {
+            return RedirectToAction("Index", "Home");
+        }
+        var roleResult = await _userManager.AddToRoleAsync(newUser, UserRole.Client.ToString());
+
+        if (roleResult.Succeeded)
+        {
+            return View("Error");
+        }
+
+        return RedirectToAction("Index", "Home");
     }
 
     [HttpPost]
