@@ -10,13 +10,13 @@
 <div class="row row-cols-4 row-cols-sm-4 row-cols-md-4 g-4">
 @foreach (var doctor in Model)
 {
-    <div class="card" style="width: 18rem;">
-        <img class="card-img-top" src="@doctor.ImageLink" alt="Card image cap">
-        <div class="card-body">
+    <div class="card card-1" style="width: 18rem;margin-left:40px;height:auto">
+        <img class="card-img-top" src="@doctor.ImageLink" alt="Card image cap" style="border-radius:16px; padding:10px;margin-top:10px;">
+            <div class="card-body" id="custom-card-body" @*style="height: auto; display: flex; flex-direction: column; justify-content: space-between; padding: 0 18px;"*@>
             <h5 class="card-title">@doctor.Name @doctor.Surname @doctor.MiddleName</h5>
             <p class="card-text">@doctor.Age</p>
             <p class="card-text">@doctor.Info</p>
-            <a type="button" class="btn btn-sm btn-outline-info" asp-controller="Doctors"
+            <a type="button" id="details-btn" class="btn btn-sm btn-outline-info" asp-controller="Doctors"
                asp-action="Details" asp-route-id="@doctor.Id">
                 Details
             </a>
@@ -24,3 +24,5 @@
     </div>
 }
 </div>
+
+<script src="~/js/site.js"></script>
