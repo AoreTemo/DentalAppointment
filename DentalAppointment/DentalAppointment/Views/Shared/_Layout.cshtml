@@ -37,16 +37,7 @@
                     <ul class="navbar-nav">
                         @if (SignInManager.IsSignedIn(User))
                         {
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="LogOut">Log out</a>
-                            </li>
-
-                            <li calss="nav-item">
-                                <a class="nav-link text-dark greeting" href="#">
-                                    Hello, @UserManager.GetUserName(User)
-                               </a>
-                            </li>
-                           <li class="nav-item-button">
+                            <li class="nav-item-button">
                                 <form asp-area="" asp-controller="Account" asp-action="LogOut" method="get">
                                     <button type="submit" class="nav-link-but">LogOut</button>
                                 </form>
@@ -54,13 +45,15 @@
                         }
                         else
                         {
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Login">
-                                    Log in
-                                </a>
+                            <li class="nav-item-button">
+                                <form asp-area="" asp-controller="Account" asp-action="Login" method="get">
+                                    <button type="submit" class="nav-link-but">Log in</button>
+                                </form>
                             </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Register">Register</a>
+                            <li class="nav-item-button">
+                                <form asp-area="" asp-controller="Account" asp-action="Register" method="get">
+                                    <button type="submit" class="nav-link-but">Register</button>
+                                </form>
                             </li>
                         }
                     </ul>
