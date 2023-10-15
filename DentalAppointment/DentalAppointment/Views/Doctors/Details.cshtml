@@ -1,0 +1,19 @@
+@using Core.Models
+@model Doctor
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "_Layout";
+}
+
+<html>
+<body>
+
+<div class="card" style="width: 18rem;">
+  <div class="card-body">
+    <h5 class="card-title">@Model.Surname @Model.Name</h5>
+    <p class="card-text">@Model.Age</p>
+  </div>
+</div>
+</body>
+</html>

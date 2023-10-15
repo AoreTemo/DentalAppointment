@@ -1,3 +1,5 @@
+using BLL.Interface;
+using BLL.Services;
 using Core.Models;
 using DAL;
 using DAL.Interfaces;
@@ -16,7 +18,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(
     options => options.UseSqlServer(connectionString)
 );
 builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
-builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+builder.Services.AddScoped<DoctorService>();
 
 builder.Services.AddIdentity<AppUser, IdentityRole>()
     .AddDefaultTokenProviders()

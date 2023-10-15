@@ -1,10 +1,10 @@
 ﻿using System.Linq.Expressions;
+using Core.Models;
 
-namespace BLL.Services;
+namespace BLL.Interface;
 
-public interface IGenericService<T> where T : class
+public interface IGenericService<T>
 {
     T? GetById(int id);
-    List<T> GetByPredicate(Expression<Func<T, bool>> filter = null,
-        Expression<Func<IQueryable<T>, IOrderedQueryable<T>>> orderBy = null);
+    List<T> GetByPredicate(Expression<Func<T, bool>> filter = null, Expression<Func<IQueryable<T>, IOrderedQueryable<T>>> orderBy = null);
 }
