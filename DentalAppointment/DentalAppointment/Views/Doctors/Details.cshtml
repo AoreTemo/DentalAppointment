@@ -6,14 +6,64 @@
     Layout = "_Layout";
 }
 
-<html>
-<body>
+@{
+    // Get the current date
+    var today = DateTime.Today;
+    // Get the first day of the current week
+    var firstDayOfWeek = today.AddDays(-(int)today.DayOfWeek);
+    // Get the first day of the next week
+    var nextWeek = firstDayOfWeek.AddDays(7);
+}
 
-<div class="card" style="width: 18rem;">
-  <div class="card-body">
-    <h5 class="card-title">@Model.Surname @Model.Name</h5>
-    <p class="card-text">@Model.Age</p>
-  </div>
-</div>
-</body>
-</html>
+<table>
+    <thead>
+        <tr>
+            @for (int i = 0; i < 7; i++)
+            {
+                // Get the date for each day of the current week
+                var date = firstDayOfWeek.AddDays(i);
+                // Format the date as "DayOfWeek dd.MM"
+                var formattedDate = date.ToString("dddd dd.MM");
+                <th>@formattedDate</th>
+            }
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            @for (int i = 0; i < 7; i++)
+            {
+                // Create a column for each day of the current week
+                <td>
+                    @for (int j = 0; j < 5; j++)
+                    {
+                        // Create a button for each row of the column
+                        <button>Button @(j + 1)</button><br/>
+                    }
+                </td>
+            }
+        </tr>
+        <tr>
+            @for (int i = 0; i < 7; i++)
+            {
+                // Get the date for each day of the next week
+                var date = nextWeek.AddDays(i);
+                // Format the date as "DayOfWeek dd.MM"
+                var formattedDate = date.ToString("dddd dd.MM");
+                <th>@formattedDate</th>
+            }
+        </tr>
+        <tr>
+            @for (int i = 0; i < 7; i++)
+            {
+                // Create a column for each day of the next week
+                <td>
+                    @for (int j = 0; j < 5; j++)
+                    {
+                        // Create a button for each row of the column
+                        <button>Button @(j + 1)</button><br/>
+                    }
+                </td>
+            }
+        </tr>
+    </tbody>
+</table>

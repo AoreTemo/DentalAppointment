@@ -45,12 +45,12 @@
                                 <a class="nav-link text-dark greeting" href="#">
                                     Hello, @UserManager.GetUserName(User)
                                </a>
-                               <li class="nav-item-button">
+                            </li>
+                           <li class="nav-item-button">
                                 <form asp-area="" asp-controller="Account" asp-action="LogOut" method="get">
                                     <button type="submit" class="nav-link-but">LogOut</button>
                                 </form>
-                                
-                                </li>
+                           </li>
                         }
                         else
                         {
