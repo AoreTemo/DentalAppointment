@@ -1,0 +1,64 @@
+﻿.card-title {
+    font-size: 18px;
+    font-weight: 600;
+    font-family: "Anonymous Pro"
+}
+
+.card-text {
+    width:inherit;
+    padding:0;
+    font-size: 16px;
+    font-family: "Anonymous Pro"
+}
+
+.details-btn{
+    display:inline-block;
+    position: relative;
+    color: #19aae6;
+    background: #ffffff;
+    font-family: "Anonymous Pro";
+    font-weight: 600;
+    font-size: 17px;
+    padding: 10px 16px;
+    margin: 10px;
+    border: 2px solid #19aae6;
+    border-radius: 8px;
+    z-index: 1;
+    overflow: hidden;
+    transition: 0.5s;
+    text-decoration: none;
+}
+.details-btn:before {
+    content: "";
+    position: absolute;
+    background: #19aae6;
+    height: 150px;
+    width: 200px;
+    border-radius: 50%;
+    z-index: -1;
+}
+    
+.details-btn:hover{
+    color: #ffffff;
+}
+
+.details-btn:before{
+    top:100%;
+    left: 100%;
+    transition: 0.7s;
+}
+
+.details-btn:hover:before{
+    top: -30px;
+    left: -30px;
+}
+
+.details-btn:active:before{
+    background: #3a0ca3;
+    transition: 0s;
+}
+
+
+
+
+
