@@ -13,7 +13,13 @@ public abstract class GenericService<T> : IGenericService<T>
     {
         _repository = repository;
     }
-    
+
+
+    public void Add(T item)
+    {
+        _repository.Add(item);
+        _repository.SaveChanges();
+    }
 
     public T? GetById(int id)
     {

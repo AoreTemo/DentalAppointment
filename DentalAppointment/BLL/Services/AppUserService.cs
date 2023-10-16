@@ -1,12 +1,13 @@
-﻿using Core.Models;
+﻿using BLL.Interface;
+using Core.Models;
 using DAL.Interfaces;
 using DAL.Repositories;
 
 namespace BLL.Services;
 
-public class AppUserService : GenericService<AppUser>
+public class AppUserService : GenericService<AppUser>, IAppUserService
 {
-    protected AppUserService(IRepository<AppUser> repository) : base(repository)
+    public AppUserService(IRepository<AppUser> repository) : base(repository)
     {
     }
 }

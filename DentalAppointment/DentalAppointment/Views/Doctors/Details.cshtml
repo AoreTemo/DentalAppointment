@@ -1,9 +1,14 @@
-@using Core.Models
-@model Doctor
+@using System.Text.Json
+@model DentalAppointment.ViewModels.DetailsViewModel
 
 @{
     ViewBag.Title = "Details";
     Layout = "_Layout";
+}
+
+@{
+    // Предположим, у вас есть модель с полем Name
+    var serializedModel = JsonSerializer.Serialize(Model.Doctor.Name);
 }
 
 @{
@@ -31,53 +36,170 @@
     tr:nth-child(even) {
       background-color: #dddddd;
     }
+    
+    /* Стили для элемента карточки */
+    .confirm-card {
+      display: none; /* Скрыть элемент по умолчанию */
+      position: fixed; /* Зафиксировать позицию элемента */
+      z-index: 1; /* Поместить элемент поверх других */
+      left: 50%; /* Установить левый край элемента по центру экрана */
+      top: 50%; /* Установить верхний край элемента по центру экрана */
+      transform: translate(-50%, -50%); /* Сместить элемент на половину его ширины и высоты влево и вверх, чтобы центрировать его */
+      width: 300px; /* Установить ширину элемента */
+      height: 200px; /* Установить высоту элемента */
+      background-color: white; /* Установить цвет фона элемента */
+      border: 1px solid black; /* Установить цвет и толщину границы элемента */
+      box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2); /* Установить тень для элемента */
+    }
+    
+    /* Стили для элемента с текстом сообщения */
+    .confirm-message {
+      padding: 20px; /* Установить отступы для элемента */
+      font-size: 18px; /* Установить размер шрифта для элемента */
+    }
+    
+    /* Стили для элемента с кнопками */
+    .confirm-buttons {
+      display: flex; /* Установить тип отображения элемента как flex, чтобы выравнивать его дочерние элементы */
+      justify-content: space-around; /* Распределить дочерние элементы равномерно по горизонтали */
+      align-items: center; /* Выровнять дочерние элементы по вертикали */
+    }
+    
+    /* Стили для кнопки подтверждения */
+    .confirm-yes {
+      width: 100px; /* Установить ширину кнопки */
+      height: 40px; /* Установить высоту кнопки */
+      background-color: green; /* Установить цвет фона кнопки */
+      color: white; /* Установить цвет текста кнопки */
+    }
+    
+    /* Стили для кнопки отклонения */
+    .confirm-no {
+      width: 100px; /* Установить ширину кнопки */
+      height: 40px; /* Установить высоту кнопки */
+      background-color: red; /* Установить цвет фона кнопки */
+      color: white; /* Установить цвет текста кнопки */
+    }
+
 </style>
 
 <table>
-    <tr>
-        @for (int i = 0; i < 7; i++)
-        {
-            // Get the date for each day of the current week
-            var date = firstDayOfWeek.AddDays(i);
-            // Format the date as "DayOfWeek dd.MM"
-            var formattedDate = date.ToString("dddd dd.MM");
-            <th style="text-align: center;">@formattedDate</th>
-        }
-    </tr>
-    <tr>
-        @for (int i = 0; i < 7; i++)
-        {
-            <td style="text-align: center;">
-                @for (int j = 0; j < 5; j++)
-                {
-                    <form asp-area="" asp-controller="Account" asp-action="Register" method="get">
-                        <button type="submit" class="nav-link-but">Button @(j + 1)</button><br/>
-                    </form>
-                }
-            </td>
-        }
-    </tr>
-    <tr>
-        @for (int i = 0; i < 7; i++)
-        {
-            // Get the date for each day of the next week
-            var date = nextWeek.AddDays(i);
-            // Format the date as "DayOfWeek dd.MM"
-            var formattedDate = date.ToString("dddd dd.MM");
-            <th style="text-align: center;">@formattedDate</th>
-        }
-    </tr>
-    <tr>
-        @for (int i = 0; i < 7; i++)
-        {
-            <td style="text-align: center;">
-                @for (int j = 0; j < 5; j++)
-                {
-                        <form asp-area="" asp-controller="Account" asp-action="Register" method="get">
-                            <button type="submit" class="nav-link-but">Button @(j + 1)</button><br/>
-                        </form>
-                }
-            </td>
-        }
-    </tr>
+  <tr>
+      @for (int i = 0; i < 7; i++) {
+        var date = firstDayOfWeek.AddDays(i);
+        var formattedDate = date.ToString("dddd dd.MM");
+        <th style="text-align: center;">@formattedDate</th>
+      }
+  </tr>
+  <tr>
+   @for (var i = 0; i < 7; i++) {
+   var date = firstDayOfWeek.AddDays(i); // получаем дату для текущей ячейки
+   var dateString = date.ToString("yyyy-MM-dd"); // преобразуем дату в строку с нужным форматом
+   <td style="text-align: center;">
+   @for (int j = 0, h = 10; j < 5; j++, h++)
+   {
+   var dataTime = DateTime.Now.Date + new TimeSpan(h, 0, 0);
+   
+        // Проверяем, существует ли уже appointment с такой датой и временем
+        var appointmentExists = Model.Appointments.Where(
+            a => a.AppointmentDate == date && a.AppointmentTime == dataTime.TimeOfDay
+        ).Any();
+   
+        // Если appointment существует, то отключаем кнопку
+        var disabled = appointmentExists ? "disabled" : "";
+   
+        <button type="submit" class="nav-link-but" data-date="@dateString" data-time="@dataTime" onclick="return confirmBooking(this)" @disabled>
+          @h:00
+        </button><br/>
+      }
+    </td>
+   }
+  </tr>
+  <tr>
+    @for (var i = 0; i < 7; i++) {
+      var date = nextWeek.AddDays(i);
+      var formattedDate = date.ToString("dddd dd.MM");
+      <th style="text-align: center;">@formattedDate</th>
+    }
+  </tr> 
+  <tr>
+    @for (var i = 0; i < 7; i++) {
+      var date = nextWeek.AddDays(i); // получаем дату для текущей ячейки
+      var dateString = date.ToString("yyyy-MM-dd"); // преобразуем дату в строку с нужным форматом
+      <td style="text-align: center;">
+       @for (int j = 0, h = 10; j < 5; j++, h++)
+       {
+         var dataTime = DateTime.Now.Date + new TimeSpan(h, 0, 0);
+         
+         <button type="submit" class="nav-link-but" data-date="@dateString" data-time="@dataTime" onclick="return confirmBooking(this)">
+           @h:00
+         </button><br/>
+       }
+      </td>
+    }
+  </tr>
 </table>
+
+<!-- Это элемент, который будет показываться как карточка -->
+<div id="confirm-card" class="confirm-card">
+  <!-- Это элемент, который будет содержать текст сообщения -->
+  <div id="confirm-message" class="confirm-message"></div>
+  <!-- Это элемент, который будет содержать две кнопки -->
+  <div class="confirm-buttons">
+    <!-- Это кнопка для подтверждения -->
+    <button id="confirm-yes" class="confirm-yes">Подтвердить</button>
+    <!-- Это кнопка для отклонения -->
+    <button id="confirm-no" class="confirm-no">Отклонить</button>
+  </div>
+</div>
+<script>
+  function confirmBooking(button) {
+    var time = button.getAttribute("data-time");
+    var date = button.getAttribute("data-date");
+    var doctorId = @Model.Doctor.Id;
+    var serializedModel = @Html.Raw(serializedModel);
+    var message = "Вы хотите записаться на прием к доктору с айди " + serializedModel + " на время " + time + "?";
+    // Получаем элементы карточки, сообщения и кнопок
+    var card = document.getElementById("confirm-card");
+    var messageElement = document.getElementById("confirm-message");
+    var yesButton = document.getElementById("confirm-yes");
+    var noButton = document.getElementById("confirm-no");
+    // Устанавливаем текст сообщения в элементе
+    messageElement.textContent = message;
+    // Показываем карточку, устанавливая свойство display в block
+    card.style.display = "block";
+    // Добавляем обработчик события click для кнопки подтверждения
+    yesButton.onclick = function() {
+      // Скрываем карточку, устанавливая свойство display в none
+      card.style.display = "none";
+      // Отправляем запрос на сервер для создания записи, как и раньше
+      var form = document.createElement("form");
+      form.method = "post";
+      form.action = "/Appointment/Create";
+      var inputDate = document.createElement("input");
+      inputDate.type = "hidden";
+      inputDate.name = "AppointmentDate";
+      inputDate.value = button.getAttribute("data-date"); 
+      form.appendChild(inputDate);
+      var inputTime = document.createElement("input");
+      inputTime.type = "hidden";
+      inputTime.name = "AppointmentTime"; // изменил имя параметра на DoctorId
+      inputTime.value = time;
+      form.appendChild(inputTime);
+      var inputDoctorId = document.createElement("input");
+      inputDoctorId.type = "hidden";
+      inputDoctorId.name = "DoctorId"; // изменил имя параметра на DoctorId
+      inputDoctorId.value = doctorId;
+      form.appendChild(inputDoctorId);
+      document.body.appendChild(form);
+      form.submit();
+    }
+    // Добавляем обработчик события click для кнопки отклонения
+    noButton.onclick = function() {
+      // Скрываем карточку, устанавливая свойство display в none
+      card.style.display = "none";
+      // Возвращаем false, чтобы отменить действие по умолчанию
+      return false;
+    }
+  }
+</script>

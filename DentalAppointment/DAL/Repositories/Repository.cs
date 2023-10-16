@@ -43,6 +43,11 @@ public class Repository<T> : IRepository<T> where T : class
         return item;
     }
 
+    public void SaveChanges()
+    {
+        _context.SaveChanges();
+    }
+
     public List<T> GetAll()
     {
         var resultList = _table.ToList();

@@ -19,6 +19,8 @@ builder.Services.AddDbContext<ApplicationDbContext>(
 );
 builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 builder.Services.AddScoped<DoctorService>();
+builder.Services.AddScoped<AppointmentService>();
+builder.Services.AddScoped<AppUserService>();
 
 builder.Services.AddIdentity<AppUser, IdentityRole>()
     .AddDefaultTokenProviders()
