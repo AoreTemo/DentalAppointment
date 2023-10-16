@@ -13,13 +13,58 @@ public class AppointmentService : GenericService<Appointment>, IAppointmentServi
     {
     }
 
+    public List<Core.Models.Appointment> GetPlannedAppointments()
+    {
+        return GetByPredicate(filter: a => IsAppointmentPlanned(a),
+            orderBy: appointments => appointments.OrderBy(
+                    x => x.AppointmentDate + x.AppointmentTime
+                )
+            );
+    }
+    
+    public List<Appointment>? GetCurrentAppointments()
+    {
+        return GetByPredicate(filter: a => IsAppointmentCurrent(a),
+            orderBy: appointments => appointments.OrderBy(
+                    x => x.AppointmentDate + x.AppointmentTime
+                )
+            );
+    }
+    
+    public List<Appointment>? GetFinishedAppointments()
+    {
+        return GetByPredicate(filter: a => IsAppointmentFinished(a),
+            orderBy: appointments => appointments.OrderBy(
+                    x => x.AppointmentDate + x.AppointmentTime
+                )
+            );
+
+    }
+    public bool IsAppointmentPlanned(Appointment a)
+    {
+        return DateTime.Now.Date < a.AppointmentDate.Date ||
+               (DateTime.Now.Hour < a.AppointmentTime.Hours && DateTime.Now.Date == a.AppointmentDate.Date);
+    }
+    
+    public bool IsAppointmentCurrent(Appointment a)
+    {
+        return DateTime.Now.Hour == a.AppointmentTime.Hours && DateTime.Now.Date == a.AppointmentDate.Date;
+    }
+    
+    public bool IsAppointmentFinished(Appointment a)
+    {
+        return DateTime.Now.Date > a.AppointmentDate.Date ||
+               (DateTime.Now.Hour > a.AppointmentTime.Hours && DateTime.Now.Date == a.AppointmentDate.Date);
+    }
+    
     public new List<Appointment> GetByPredicate(Expression<Func<Appointment, bool>> filter = null, Expression<Func<IQueryable<Appointment>, IOrderedQueryable<Appointment>>> orderBy = null)
     {
         var query = _repository.GetAllAsTable().Include(
-            a => a.Doctor
-        ).Include(
-            a => a.AppUser
-        ).AsQueryable();
+                a => a.Doctor
+            ).Include(
+                a => a.AppUser
+            ).ToList().AsQueryable();
+
         if (filter != null)
         {
             query = query.Where(filter);
@@ -28,26 +73,36 @@ public class AppointmentService : GenericService<Appointment>, IAppointmentServi
         {
             query = orderBy.Compile()(query);
         }
+
+        if (query == null)
+        {
+            var result = new List<Appointment>();
+            
+            return result;
+        }
         return query.ToList();
     }
     
-    public Appointment GetNearestAppointment()
+    public Appointment? GetNearestAppointment()
     {
         var appointments = GetByPredicate();
+
         // Order the appointments by date and time.
-        appointments.Sort((a, b) => a.AppointmentDate.CompareTo(b.AppointmentDate));
+        appointments.Sort((a, b) =>
+        {
+            // Compare the appointment dates.
+            var dateComparison = a.AppointmentDate.CompareTo(b.AppointmentDate);
+            if (dateComparison != 0)
+            {
+                return dateComparison;
+            }
+
+            // If the appointment dates are the same, compare the appointment times.
+            return a.AppointmentTime.CompareTo(b.AppointmentTime);
+        });
 
         // Find the first appointment in the future.
-        foreach (Appointment appointment in appointments)
-        {
-            if (appointment.AppointmentDate >= DateTime.Now)
-            {
-                return appointment;
-            }
-        }
-
-        // If there are no appointments in the future, return null.
-        return null;
+        return appointments.FirstOrDefault(appointment => appointment.AppointmentDate >= DateTime.Now);
     }
 }
 
