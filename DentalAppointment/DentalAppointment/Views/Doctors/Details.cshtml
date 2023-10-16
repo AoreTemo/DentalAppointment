@@ -181,19 +181,27 @@
   </tr> 
   <tr>
     @for (var i = 0; i < 7; i++) {
-      var date = nextWeek.AddDays(i); // получаем дату для текущей ячейки
-      var dateString = date.ToString("yyyy-MM-dd"); // преобразуем дату в строку с нужным форматом
-      <td style="text-align: center;">
+       var date = firstDayOfWeek.AddDays(i); // получаем дату для текущей ячейки
+       var dateString = date.ToString("yyyy-MM-dd"); // преобразуем дату в строку с нужным форматом
+       <td style="text-align: center;">
        @for (int j = 0, h = 10; j < 5; j++, h++)
        {
-         var dataTime = DateTime.Now.Date + new TimeSpan(h, 0, 0);
-         
-         <button type="submit" class="nav-link-but" data-date="@dateString" data-time="@dataTime" onclick="return confirmBooking(this)">
-           @h:00
-         </button><br/>
+       var dataTime = DateTime.Now.Date + new TimeSpan(h, 0, 0);
+       
+            // Проверяем, существует ли уже appointment с такой датой и временем
+            var appointmentExists = Model.Appointments.Where(
+                a => a.AppointmentDate == date && a.AppointmentTime == dataTime.TimeOfDay
+            ).Any();
+       
+            // Если appointment существует, то отключаем кнопку
+            var disabled = appointmentExists ? "disabled" : "";
+       
+            <button type="submit" class="nav-link-but" data-date="@dateString" data-time="@dataTime" onclick="return confirmBooking(this)" @disabled>
+              @h:00
+            </button><br/>
+          }
+        </td>
        }
-      </td>
-    }
   </tr>
 </table>
 
