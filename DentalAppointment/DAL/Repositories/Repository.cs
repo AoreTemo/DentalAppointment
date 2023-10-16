@@ -57,8 +57,6 @@ public class Repository<T> : IRepository<T> where T : class
     
     public DbSet<T> GetAllAsTable()
     {
-        var resultList = _table;
-
-        return resultList;
+        return _table;
     }
 }

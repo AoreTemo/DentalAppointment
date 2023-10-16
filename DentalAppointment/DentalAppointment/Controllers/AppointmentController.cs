@@ -25,7 +25,7 @@ public class AppointmentController : Controller
 
     // POST: /Appointments/Create
     [HttpPost]
-    public IActionResult Create(DateTime AppointmentDate, DateTime AppointmentTime, int DoctorId) // изменил имя параметра на DoctorId
+    public IActionResult Create(DateTime AppointmentDate, DateTime AppointmentTime, int DoctorId)
     {
         var doctor = _doctorService.GetById(DoctorId);
         if (doctor == null)
@@ -33,33 +33,28 @@ public class AppointmentController : Controller
             return NotFound();
         }
 
-        // проверяем, что нет других записей на это же время и к этому же доктору
         var existingAppointment = _appointmentService.GetByPredicate(
-            a => a.AppointmentDate == AppointmentDate && a.AppointmentTime == DateTime.Parse(AppointmentTime.ToString("HH:mm:ss")).TimeOfDay && a.DoctorId == DoctorId).ToList().FirstOrDefault(); // изменил имя параметра на DoctorId и добавил преобразование строки в DateTime
+            a => a.AppointmentDate == AppointmentDate && a.AppointmentTime == DateTime.Parse(AppointmentTime.ToString("HH:mm:ss")).TimeOfDay && a.DoctorId == DoctorId).ToList().FirstOrDefault(); 
         if (existingAppointment != null)
         {
             return Conflict();
         }
 
-        // проверяем, что пользователь авторизован и имеет идентификатор
         if (!User.Identity.IsAuthenticated || User.FindFirst(ClaimTypes.NameIdentifier) == null)
         {
             return Unauthorized();
         }
 
-        // создаем новый объект Appointment с данными из параметров и текущим пользователем
         var appointment = new Appointment
         {
-            AppointmentDate = AppointmentDate, // новое свойство
-            AppointmentTime = AppointmentTime.TimeOfDay, // добавил преобразование строки в DateTime
-            DoctorId = DoctorId, // изменил имя параметра на DoctorId
+            AppointmentDate = AppointmentDate, 
+            AppointmentTime = AppointmentTime.TimeOfDay, 
+            DoctorId = DoctorId, 
             AppUserId = User.FindFirst(ClaimTypes.NameIdentifier)!.Value
         };
 
-        // добавляем новый объект Appointment в базу данных и сохраняем изменения
         _appointmentService.Add(appointment);
 
-        // возвращаем результат с кодом 200 OK и данными о созданной записи
-        return Ok(appointment);
+        return RedirectToAction("Info", "Account");
     }
 }

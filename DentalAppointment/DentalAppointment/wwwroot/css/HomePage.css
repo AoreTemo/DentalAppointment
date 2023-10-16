@@ -83,7 +83,7 @@ main{
     background: url("https://img.freepik.com/free-vector/gradient-trendy-background_23-2150461016.jpg") center;
     color: #ffffff;
     border-radius: 8px;
-    padding: 0,18px;
+    padding: 0 18px;
     width: 244px;
     transition: 0.5s ease;
     overflow: hidden;
@@ -102,6 +102,41 @@ main{
     height: 100%;
     opacity: 0.85;
     padding-right: 60px
+}
+
+.card-current {
+    background: url("https://uploads-ssl.webflow.com/5a9ee6416e90d20001b20038/6289f89c1971ae10ce01b98b_green-blue-gradient.png") center;
+    background-size: cover;
+    color: #ffffff;
+    border-radius: 8px;
+    padding: 0 18px;
+    width: 244px;
+    transition: 0.5s ease;
+    overflow: hidden;
+    transform: translate(0);
+    display:flex;
+    justify-self: center;
+}
+.card-current:hover{
+    transform: scale(1.11);
+    box-shadow: -7px 4px 28px -3px #008000;
+}
+.card-finished {
+    background: url("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTpsXToGEYdf-VdkdB1mE3cXtDTzOaLnk5jpjVLnPgXYmBv9p4Zgl3Y7LDNVCXrwyTsUCg&usqp=CAU") center;
+    background-size: cover;
+    color: #ffffff;
+    border-radius: 8px;
+    padding: 0 18px;
+    width: 244px;
+    transition: 0.5s ease;
+    overflow: hidden;
+    transform: translate(0);
+    display:flex;
+    justify-self: center;
+}
+.card-finished:hover{
+    transform: scale(1.11);
+    box-shadow: -7px 4px 28px -3px #000000;
 }
 
 .card-info{
