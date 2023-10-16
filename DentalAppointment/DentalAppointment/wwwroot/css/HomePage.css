@@ -32,7 +32,11 @@
 }
 
 .nav-link-but:hover{
-    background-color: #f2837c;
+    background-color: #77dd77;
+}
+
+.nav-link-but-log:hover{
+    background-color:#f2837c
 }
 
 main{

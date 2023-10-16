@@ -1,4 +1,6 @@
 @using System.Text.Json
+@using Core.Models;
+@using Microsoft.AspNetCore.Identity;
 @model DentalAppointment.ViewModels.DetailsViewModel
 
 @{
@@ -10,6 +12,8 @@
     // Предположим, у вас есть модель с полем Name
     var serializedModel = JsonSerializer.Serialize(Model.Doctor.Name);
     var DoctorsFullName = $"{Model.Doctor.Surname} {Model.Doctor.Name} {Model.Doctor.MiddleName}";
+    @inject SignInManager<AppUser> SignInManager
+
 }
 
 @{
@@ -23,238 +27,431 @@
 
 <style>
     table {
-      font-family: arial, sans-serif;
-      border-collapse: collapse;
-      width: 100%;
+        font-family: arial, sans-serif;
+        border-collapse: collapse;
+        width: 100%;
     }
-    
+
     td, th {
-      border: 1px solid #dddddd;
-      text-align: left;
-      padding: 8px;
+        border: 1px solid #dddddd;
+        text-align: left;
+        padding: 8px;
     }
-    
+
     tr:nth-child(even) {
-      background-color: #dddddd;
+        background-color: #dddddd;
     }
-    
+
     /* Стили для элемента карточки */
     .confirm-card {
-      display: none; /* Скрыть элемент по умолчанию */
-      position: fixed; /* Зафиксировать позицию элемента */
-      z-index: 1; /* Поместить элемент поверх других */
-      left: 50%; /* Установить левый край элемента по центру экрана */
-      top: 50%; /* Установить верхний край элемента по центру экрана */
-      transform: translate(-50%, -50%); /* Сместить элемент на половину его ширины и высоты влево и вверх, чтобы центрировать его */
-      width: 300px; /* Установить ширину элемента */
-      height: 200px; /* Установить высоту элемента */
-      background-color: white; /* Установить цвет фона элемента */
-      border: 1px solid black; /* Установить цвет и толщину границы элемента */
-      box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2); /* Установить тень для элемента */
+        display: none; /* Скрыть элемент по умолчанию */
+        position: fixed; /* Зафиксировать позицию элемента */
+        z-index: 1; /* Поместить элемент поверх других */
+        left: 50%; /* Установить левый край элемента по центру экрана */
+        top: 50%; /* Установить верхний край элемента по центру экрана */
+        transform: translate(-50%, -50%); /* Сместить элемент на половину его ширины и высоты влево и вверх, чтобы центрировать его */
+        width: 300px; /* Установить ширину элемента */
+        height: 200px; /* Установить высоту элемента */
+        background-color: white; /* Установить цвет фона элемента */
+        border: 1px solid black; /* Установить цвет и толщину границы элемента */
+        box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2); /* Установить тень для элемента */
     }
-    
+
     /* Стили для элемента с текстом сообщения */
     .confirm-message {
-      padding: 20px; /* Установить отступы для элемента */
-      font-size: 18px; /* Установить размер шрифта для элемента */
+        padding: 20px; /* Установить отступы для элемента */
+        font-size: 18px; /* Установить размер шрифта для элемента */
     }
-    
+
     /* Стили для элемента с кнопками */
     .confirm-buttons {
-      display: flex; /* Установить тип отображения элемента как flex, чтобы выравнивать его дочерние элементы */
-      justify-content: space-around; /* Распределить дочерние элементы равномерно по горизонтали */
-      align-items: center; /* Выровнять дочерние элементы по вертикали */
+        display: flex; /* Установить тип отображения элемента как flex, чтобы выравнивать его дочерние элементы */
+        justify-content: space-around; /* Распределить дочерние элементы равномерно по горизонтали */
+        align-items: center; /* Выровнять дочерние элементы по вертикали */
     }
-    
+
     /* Стили для кнопки подтверждения */
     .confirm-yes {
-      width: 100px; /* Установить ширину кнопки */
-      height: 40px; /* Установить высоту кнопки */
-      background-color: green; /* Установить цвет фона кнопки */
-      color: white; /* Установить цвет текста кнопки */
+        width: 100px; /* Установить ширину кнопки */
+        height: 40px; /* Установить высоту кнопки */
+        background-color: green; /* Установить цвет фона кнопки */
+        color: white; /* Установить цвет текста кнопки */
     }
-    
+
     /* Стили для кнопки отклонения */
     .confirm-no {
-      width: 100px; /* Установить ширину кнопки */
-      height: 40px; /* Установить высоту кнопки */
-      background-color: red; /* Установить цвет фона кнопки */
-      color: white; /* Установить цвет текста кнопки */
+        width: 100px; /* Установить ширину кнопки */
+        height: 40px; /* Установить высоту кнопки */
+        background-color: red; /* Установить цвет фона кнопки */
+        color: white; /* Установить цвет текста кнопки */
     }
 
-</style>
+    .pb-3{
+        background: #eee;
+    }
 
-<section style="background-color: #eee;">
-    <div class="row">
-      <div class="col-lg-4">
-        <div class="card mb-4">
-          <div class="card-body text-center">
-            <img src="@Model.Doctor.ImageLink" alt="avatar"
-                 class="rounded-circle img-fluid" style="width: 150px;">
+    .container {
+        width: 100%;
+        padding-right: 15px;
+        padding-left: 15px;
+        margin-right: auto;
+        margin-left: auto;
+    }
+
+    .row {
+        display: flex;
+        flex-wrap: wrap;
+        margin-right: -15px;
+        margin-left: -15px;
+        justify-content: space-around;
+    }
+
+    .doctor-info {
+        float: right;
+        width: auto;
+        border: 1px solid;
+        border-radius: 5px;
+        background-color: #b59beb;
+    }
+
+    .doctor-info-text {
+        margin-top: 20px;
+        font-family: "Anonymous Pro";
+        font-size: 16px;
+    }
+
+    .info-title {
+        padding: 20px;
+        font-family: "Anonymous Pro";
+        font-weight: 600;
+        /*text-align: center;*/
+        font-size: 16px;
+    }
+
+    .warn-mes {
+        width: 100%;
+        margin: 150px 0;
+    }
+
+    .warn-mes-card {
+        overflow: visible;
+        position: relative;
+        max-width: 500px;
+        height: 500px;
+        border: 2px solid;
+        border-radius: 10px;
+        margin: 0 auto;
+        background-color: #c2bfb8;
+    }
+
+    .warn-mes-img {
+        display: block;
+        width: 100%;
+        height: 50%;
+        object-fit: cover;
+        z-index: 1;
+    }
+
+    .warn-mes-content {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align:center;
+    }
+
+    .warn-mes-title {
+        padding: 20px;
+        font-size: 28px;
+        font-family: "Anonymous Pro";
+        position: relative;
+    }
+
+
+    .warn-mes-text {
+        margin-left: 20px;
+        font-size: 18px;
+        font-family: "Anonymous Pro";
+        position: relative;
+        
+    }
+
+    .warn-mes-text a{
+        display: inline;
+        text-decoration:none;
+        color: inherit;
+        margin: 0;
+    }
+
+    .cssbuttons-io {
+        margin-bottom: 10px;
+        align-content: center;
+        position: relative;
+        font-family: inherit;
+        font-weight: 500;
+        font-size: 18px;
+        letter-spacing: 0.05em;
+        border-radius: 0.8em;
+        border: none;
+        background: linear-gradient(to right, #8e2de2, #4a00e0);
+        color: ghostwhite;
+        overflow: hidden;
+    }
+
+        .cssbuttons-io svg {
+            width: 1.2em;
+            height: 1.2em;
+            margin-right: 0.5em;
+        }
+
+        .cssbuttons-io span {
+            position: relative;
+            z-index: 10;
+            transition: color 0.4s;
+            display: inline-flex;
+            align-items: center;
+            padding: 0.8em 1.2em 0.8em 1.05em;
+        }
+
+        .cssbuttons-io::before,
+        .cssbuttons-io::after {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+        }
+
+        .cssbuttons-io::before {
+            content: "";
+            background: #000;
+            width: 120%;
+            left: -10%;
+            transform: skew(30deg);
+            transition: transform 0.4s cubic-bezier(0.3, 1, 0.8, 1);
+        }
+
+        .cssbuttons-io:hover::before {
+            transform: translate3d(100%, 0, 0);
+        }
+
+        .cssbuttons-io:active {
+            transform: scale(0.95);
+        }
+</style>
+<section style="background-color: #eee; padding: 40px;">
+    <div class="container">
+        <div class="row">
+            @* <div class="col-lg-4">
+            <div class="mb-4">
+            <div class="card text-center">
+            <img src="@Model.Doctor.ImageLink" alt="avatar" class="card-img @*rounded-circle img-fluid" @*style="width: 150px;">
             <h5 class="my-3">@DoctorsFullName</h5>
             <p class="text-muted mb-1">@Model.Doctor.Specialization</p>
             <p class="text-muted mb-4">@Model.Doctor.Age</p>
-          </div>
-        </div>
-      </div>
-      <div class="col-lg-8">
-        <div class="card mb-4">
-          <div class="card-body">
-            <div class="row">
-              <div class="col-sm-3">
-                <p class="mb-0">Full Name</p>
-              </div>
-              <div class="col-sm-9">
-                <p class="text-muted mb-0">@DoctorsFullName</p>
-              </div>
             </div>
-            <hr>
-            <div class="row">
-              <div class="col-sm-3">
-                <p class="mb-0">Email</p>
-              </div>
-              <div class="col-sm-9">
-                <p class="text-muted mb-0">@Model.Doctor.Email</p>
-              </div>
             </div>
-            <hr>
-            <div class="row">
-              <div class="col-sm-3">
-                <p class="mb-0">Phone</p>
-              </div>
-              <div class="col-sm-9">
-                <p class="text-muted mb-0">@Model.Doctor.PhoneNumber</p>
-              </div>
+            </div>*@
+            <div class="card card-1 " style="width: 18rem;margin-left:40px;">
+                <img class="card-img-top" src="@Model.Doctor.ImageLink" alt="Card image cap" style="border-radius:16px; padding:10px;margin-top:10px;height:100%;object-fit:cover;">
+                <div class="card-body">
+                    <h5 class="card-title">@Model.Doctor.Name @Model.Doctor.Surname @Model.Doctor.MiddleName</h5>
+                    <p class="card-text">@Model.Doctor.Age</p>
+                    <p class="card-text">@Model.Doctor.Specialization</p>
+                </div>
             </div>
-            <hr>
-            <hr>
-            <div class="row">
-              <div class="col-sm-3">
-                <p class="mb-0">Bio:</p>
-                <p class="text-muted mb-0">@Model.Doctor.Info</p>
-              </div>
+            <div class="col-lg-8">
+                <div class=" mb-4">
+                    <div class="doctor-info">
+                        <div class="row">
+                            <div class="col-sm-2">
+                                <p class="info-title mb-0">Full Name</p>
+                            </div>
+                            <div class="col-sm-9">
+                                <p class="doctor-info-text mb-0">@DoctorsFullName</p>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col-sm-2">
+                                <p class="info-title mb-0">Email</p>
+                            </div>
+                            <div class="col-sm-9">
+                                <p class="doctor-info-text mb-0">@Model.Doctor.Email</p>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col-sm-2">
+                                <p class="info-title mb-0">Phone</p>
+                            </div>
+                            <div class="col-sm-9">
+                                <p class="doctor-info-text mb-0">@Model.Doctor.PhoneNumber</p>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col-sm-2">
+                                <p class="info-title mb-0">Bio:</p>
+                            </div>
+                            <div class="col-sm-9">
+                                <p class="doctor-info-text mb-0">@Model.Doctor.Info</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-        </div>
         </div>
     </div>
-  </div>
 </section>
 
-<table>
-  <tr>
-      @for (int i = 0; i < 7; i++) {
-        var date = firstDayOfWeek.AddDays(i);
-        var formattedDate = date.ToString("dddd dd.MM");
-        <th style="text-align: center;">@formattedDate</th>
-      }
-  </tr>
-  <tr>
-   @for (var i = 0; i < 7; i++) {
-   var date = firstDayOfWeek.AddDays(i); // получаем дату для текущей ячейки
-   var dateString = date.ToString("yyyy-MM-dd"); // преобразуем дату в строку с нужным форматом
-   <td style="text-align: center;">
-   @for (int j = 0, h = 10; j < 5; j++, h++)
-   {
-   var dataTime = DateTime.Now.Date + new TimeSpan(h, 0, 0);
-   
-        // Проверяем, существует ли уже appointment с такой датой и временем
-        var appointmentExists = Model.Appointments.Where(
-            a => a.AppointmentDate == date && a.AppointmentTime == dataTime.TimeOfDay
-        ).Any();
-   
-        // Если appointment существует, то отключаем кнопку
-        var disabled = appointmentExists ? "disabled" : "";
-   
-        <button type="submit" class="nav-link-but" data-date="@dateString" data-time="@dataTime" onclick="return confirmBooking(this)" @disabled>
-          @h:00
-        </button><br/>
-      }
-    </td>
-   }
-  </tr>
-  <tr>
-    @for (var i = 0; i < 7; i++) {
-      var date = nextWeek.AddDays(i);
-      var formattedDate = date.ToString("dddd dd.MM");
-      <th style="text-align: center;">@formattedDate</th>
-    }
-  </tr> 
-  <tr>
-    @for (var i = 0; i < 7; i++) {
-      var date = nextWeek.AddDays(i); // получаем дату для текущей ячейки
-      var dateString = date.ToString("yyyy-MM-dd"); // преобразуем дату в строку с нужным форматом
-       <td style="text-align: center;">
-       @for (int j = 0, h = 10; j < 5; j++, h++)
-       {
-       var dataTime = DateTime.Now.Date + new TimeSpan(h, 0, 0);
-       
-            // Проверяем, существует ли уже appointment с такой датой и временем
-            var appointmentExists = Model.Appointments.Where(
-                a => a.AppointmentDate == date && a.AppointmentTime == dataTime.TimeOfDay
-            ).Any();
-       
-            // Если appointment существует, то отключаем кнопку
-            var disabled = appointmentExists ? "disabled" : "";
-       
-            <button type="submit" class="nav-link-but" data-date="@dateString" data-time="@dataTime" onclick="return confirmBooking(this)" @disabled>
-              @h:00
-            </button><br/>
-          }
-        </td>
-       }
-  </tr>
-</table>
+@if (SignInManager.IsSignedIn(User))
+{
+    <table>
+        <tr>
+            @for (int i = 0; i < 7; i++)
+            {
+                var date = firstDayOfWeek.AddDays(i);
+                var formattedDate = date.ToString("dddd dd.MM");
+                <th style="text-align: center;">@formattedDate</th>
+            }
+        </tr>
+        <tr>
+            @for (var i = 0; i < 7; i++)
+            {
+                var date = firstDayOfWeek.AddDays(i); // получаем дату для текущей ячейки
+                var dateString = date.ToString("yyyy-MM-dd"); // преобразуем дату в строку с нужным форматом
+                <td style="text-align: center;">
+                    @for (int j = 0, h = 10; j < 5; j++, h++)
+                    {
+                        var dataTime = DateTime.Now.Date + new TimeSpan(h, 0, 0);
 
-<div id="confirm-card" class="confirm-card">
-  <div id="confirm-message" class="confirm-message"></div>
-  <div class="confirm-buttons">
-    <button id="confirm-yes" class="confirm-yes">Подтвердить</button>
-    <button id="confirm-no" class="confirm-no">Отклонить</button>
-  </div>
-</div>
+                        // Проверяем, существует ли уже appointment с такой датой и временем
+                        var appointmentExists = Model.Appointments.Where(
+                        a => a.AppointmentDate == date && a.AppointmentTime == dataTime.TimeOfDay
+                        ).Any();
+
+                        // Если appointment существует, то отключаем кнопку
+                        var disabled = appointmentExists ? "disabled" : "";
+
+                        <button type="submit" class="nav-link-but" data-date="@dateString" data-time="@dataTime" onclick="return confirmBooking(this)" @disabled>
+                            @h:00
+                        </button>
+
+                        <br />
+                    }
+                </td>
+            }
+        </tr>
+        <tr>
+            @for (var i = 0; i < 7; i++)
+            {
+                var date = nextWeek.AddDays(i);
+                var formattedDate = date.ToString("dddd dd.MM");
+                <th style="text-align: center;">@formattedDate</th>
+            }
+        </tr>
+        <tr>
+            @for (var i = 0; i < 7; i++)
+            {
+                var date = nextWeek.AddDays(i); // получаем дату для текущей ячейки
+                var dateString = date.ToString("yyyy-MM-dd"); // преобразуем дату в строку с нужным форматом
+                <td style="text-align: center;">
+                    @for (int j = 0, h = 10; j < 5; j++, h++)
+                    {
+                        var dataTime = DateTime.Now.Date + new TimeSpan(h, 0, 0);
+
+                        // Проверяем, существует ли уже appointment с такой датой и временем
+                        var appointmentExists = Model.Appointments.Where(
+                        a => a.AppointmentDate == date && a.AppointmentTime == dataTime.TimeOfDay
+                        ).Any();
+
+                        // Если appointment существует, то отключаем кнопку
+                        var disabled = appointmentExists ? "disabled" : "";
+
+                        <button type="submit" class="nav-link-but" data-date="@dateString" data-time="@dataTime" onclick="return confirmBooking(this)" @disabled>
+                            @h:00
+                        </button>
+
+                        <br />
+                    }
+                </td>
+            }
+        </tr>
+
+    </table>
+    <div id="confirm-card" class="confirm-card">
+        <div id="confirm-message" class="confirm-message"></div>
+        <div class="confirm-buttons">
+            <button id="confirm-yes" class="confirm-yes">Подтвердить</button>
+            <button id="confirm-no" class="confirm-no">Отклонить</button>
+        </div>
+    </div>
+}
+
+else
+{
+    <div class="warn-mes">
+        <div class="warn-mes-card">
+            <img src="/photos/warn-mes-img.png" class="warn-mes-img" />
+            <div class="warn-mes-content">
+                <h5 class="warn-mes-title">We are sorry</h5>
+                <p class="warn-mes-text">You can't make an appointment without registation.If you have an account just log in.</p>
+                <form asp-area="" asp-controller="Account" asp-action="Login" method="get">
+                <button class="cssbuttons-io" >
+                    <span><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="none" d="M0 0h24v24H0z"></path><path fill="currentColor" d="M24 12l-5.657 5.657-1.414-1.414L21.172 12l-4.243-4.243 1.414-1.414L24 12zM2.828 12l4.243 4.243-1.414 1.414L0 12l5.657-5.657L7.07 7.757 2.828 12zm6.96 9H7.66l6.552-18h2.128L9.788 21z"></path></svg> Log in</span>
+                </button>
+                </form>
+                <p class="warn-mes-text" style="text-align:start;">don't have account? just <a class="warn-mes-text nav-link" asp-area="" asp-controller="Account" asp-action="Register">click it</a></p>
+
+            </div>
+        </div>
+    </div>
+}
 
 <script>
-  function confirmBooking(button) {
-    let time = button.getAttribute("data-time");
-    let date = button.getAttribute("data-date");
-    let doctorId = @Model.Doctor.Id;
-    let serializedModel = @Html.Raw(serializedModel);
-    let message = "Вы хотите записаться на прием к доктору с айди " + serializedModel + " на время " + time + "?";
-    let card = document.getElementById("confirm-card");
-    let messageElement = document.getElementById("confirm-message");
-    let yesButton = document.getElementById("confirm-yes");
-    let noButton = document.getElementById("confirm-no");
-    messageElement.textContent = message;
-    card.style.display = "block";
+    function confirmBooking(button) {
+        let time = button.getAttribute("data-time");
+        let date = button.getAttribute("data-date");
+        let doctorId = @Model.Doctor.Id;
+        let serializedModel = @Html.Raw(serializedModel);
+        let message = "Вы хотите записаться на прием к доктору с айди " + serializedModel + " на время " + time + "?";
+        let card = document.getElementById("confirm-card");
+        let messageElement = document.getElementById("confirm-message");
+        let yesButton = document.getElementById("confirm-yes");
+        let noButton = document.getElementById("confirm-no");
+        messageElement.textContent = message;
+        card.style.display = "block";
 
-    yesButton.onclick = function() {
+        yesButton.onclick = function () {
 
-      card.style.display = "none";
+            card.style.display = "none";
 
-      let form = document.createElement("form");
-      form.method = "post";
-      form.action = "/Appointment/Create";
-      let inputDate = document.createElement("input");
-      inputDate.type = "hidden";
-      inputDate.name = "AppointmentDate";
-      inputDate.value = button.getAttribute("data-date"); 
-      form.appendChild(inputDate);
-      let inputTime = document.createElement("input");
-      inputTime.type = "hidden";
-      inputTime.name = "AppointmentTime";
-      inputTime.value = time;
-      form.appendChild(inputTime);
-      let inputDoctorId = document.createElement("input");
-      inputDoctorId.type = "hidden";
-      inputDoctorId.name = "DoctorId";
-      inputDoctorId.value = doctorId;
-      form.appendChild(inputDoctorId);
-      document.body.appendChild(form);
-      form.submit();
+            let form = document.createElement("form");
+            form.method = "post";
+            form.action = "/Appointment/Create";
+            let inputDate = document.createElement("input");
+            inputDate.type = "hidden";
+            inputDate.name = "AppointmentDate";
+            inputDate.value = button.getAttribute("data-date");
+            form.appendChild(inputDate);
+            let inputTime = document.createElement("input");
+            inputTime.type = "hidden";
+            inputTime.name = "AppointmentTime";
+            inputTime.value = time;
+            form.appendChild(inputTime);
+            let inputDoctorId = document.createElement("input");
+            inputDoctorId.type = "hidden";
+            inputDoctorId.name = "DoctorId";
+            inputDoctorId.value = doctorId;
+            form.appendChild(inputDoctorId);
+            document.body.appendChild(form);
+            form.submit();
+        }
+        noButton.onclick = function () {
+            card.style.display = "none";
+            return false;
+        }
     }
-    noButton.onclick = function() {
-      card.style.display = "none";
-      return false;
-    }
-  }
 </script>

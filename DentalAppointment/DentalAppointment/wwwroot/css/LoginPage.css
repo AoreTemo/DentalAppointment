@@ -23,11 +23,11 @@
 }
 
     .form:hover {
-        box-shadow: 0 0 20px rgba(0, 0, 0, 0.2); 
+        box-shadow: -7px 4px 28px -3px #3e4f6a;
     }
 
 .form-title{
-    margin-bottom: 20px;
+    margin-bottom: 30px;
     font-size: 26px;
     font-weight: 600;
     font-family: "Anonymous Pro";
@@ -72,7 +72,7 @@
 
 .form-control:focus ~ .login-lable,
 .form-control:valid ~ .login-lable{
-    top: -20px;
+    top: -25px;
     font-size: 14px;
     color: #0e94f4;
 }
