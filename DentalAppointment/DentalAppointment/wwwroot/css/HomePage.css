@@ -1,10 +1,14 @@
-﻿.header-container {
-    background-color: #CC77F4
-}
-
-.nav-item {
+﻿.nav-item {
     font-size: 24px;
     font-family: "Anonymous Pro";
+}
+
+.navbar-brand{
+    margin:0;
+}
+
+.nav-link{
+    gap:20px
 }
 
 .nav-item-greeting {
@@ -24,6 +28,7 @@
     background-color: #C0C0C0;
     cursor: pointer;
     transition: background-color 0.3s;
+    margin-right: 20px;
 }
 
 .nav-link-but:hover{
@@ -35,7 +40,7 @@ main{
 }
 
 .home-main{
-    background-color: #f0f0f0
+    background-color: #f0f0f0;
 }
 
 .Gallery{
@@ -95,7 +100,7 @@ main{
     padding-right: 60px
 }
 
-.card p{
+.card-info{
     padding: 10px;
 }
 
@@ -163,4 +168,63 @@ main{
 
 .box:hover img{
     filter: grayscale(0);
+}
+
+.advantages-list{
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 150px 0;
+
+}
+
+.advantages-list {
+    margin-bottom: 50px;
+    font-family: "Anonymous Pro";
+    font-size: 48px;
+    font-weight: 700;
+    text-align: center;
+}
+
+.advantageslist-title{
+    margin-bottom: 50px;
+}
+
+.tab-content-item{
+    display: grid;
+    grid-template-columns: repeat(4,1fr);
+    gap: 100px 40px
+}
+
+.ad-list-card {
+    overflow: visible;
+    position: relative;
+    max-width: 300px;
+    border: 0;
+    margin: 0 auto;
+}
+
+.ad-card-1{
+    background-image: url(/photos/background-card.png);
+}
+
+.ad-card-img {
+    display: block;
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    z-index: 1;
+}
+
+.ad-card-content {
+    padding: 0 5px;
+    background: #ffffff;
+    border: 1px solid #EAEAEA;
+    border-radius: 4px;
+    border-top: 0;
+    position: relative;
+}
+
+.ad-card-text {
+    font-size: 12px;
+    font-family: inherit;
 }
