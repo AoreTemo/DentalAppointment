@@ -41,8 +41,13 @@
                         @if (SignInManager.IsSignedIn(User))
                         {
                             <li class="nav-item-button">
+                                <form asp-area="" asp-controller="Account" asp-action="Info" method="get">
+                                    <button type="submit" class="nav-link-but">Account</button>
+                                </form>
+                            </li>
+                            <li class="nav-item-button">
                                 <form asp-area="" asp-controller="Account" asp-action="LogOut" method="get">
-                                    <button type="submit" class="nav-link-but">LogOut</button>
+                                    <button type="submit" class="nav-link-but">Log out</button>
                                 </form>
                            </li>
                         }
