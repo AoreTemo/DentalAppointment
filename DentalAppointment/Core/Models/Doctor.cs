@@ -1,4 +1,6 @@
-﻿namespace Core.Models;
+﻿using System.Text.Json.Serialization;
+
+namespace Core.Models;
 
 public class Doctor
 {
@@ -10,5 +12,6 @@ public class Doctor
     public string Info { get; set; }
     public string ImageLink { get; set; }
 
+    [JsonIgnore]
     public virtual ICollection<Appointment> Appointments { get; set; }
 }
