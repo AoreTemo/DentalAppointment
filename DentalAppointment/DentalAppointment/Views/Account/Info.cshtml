@@ -1,0 +1,47 @@
+@model System.Collections.Generic.List<Core.Models.Appointment>
+
+@{
+    ViewBag.Title = "Info";
+    Layout = "_Layout";
+}
+
+<h2>Appointments</h2>
+<div class="row row-cols-4 row-cols-sm-4 row-cols-md-4 g-4">
+@foreach (var appointment in Model)
+{
+    var doctorFullName = $"{appointment.Doctor.Surname} {appointment.Doctor.Name} {appointment.Doctor.MiddleName}";
+    var doctorSpec = appointment.Doctor.Specialization;
+    var date = appointment.AppointmentDate.Date.ToString("dd.MM.yyyy");
+    var time = appointment.AppointmentTime.ToString();
+    
+    <div class="card card-1" style="width: 18rem;margin-left:40px;">
+        <div class="card-body">
+            <h5 class="card-title">Date: @date<br/>Time: @time</h5>
+            <p class="card-text">Doctor: 
+                <a type="button" id="details-btn" class="btn btn-sm btn-outline-info" asp-controller="Doctors"
+                   asp-action="Details" asp-route-id="@appointment.DoctorId">
+                    @doctorFullName
+                </a>
+            </p>
+            <p class="card-text">Specialization: @doctorSpec</p>
+            @if(DateTime.Now.Date < appointment.AppointmentDate.Date || 
+                (DateTime.Now.Hour < appointment.AppointmentTime.Hours && DateTime.Now.Date == appointment.AppointmentDate.Date)  )
+            {
+                <p class="card-text">Status: Planned</p>
+            } 
+            else if (DateTime.Now.Date > appointment.AppointmentDate.Date || 
+                     (DateTime.Now.Hour > appointment.AppointmentTime.Hours && DateTime.Now.Date == appointment.AppointmentDate.Date))
+            {
+                <p class="card-text">Status: Finished</p>
+            }
+            else if (DateTime.Now.Hour == appointment.AppointmentTime.Hours && DateTime.Now.Date == appointment.AppointmentDate.Date)
+            {
+                <p class="card-text">Status: In progress</p>
+            }
+        </div>
+    </div>
+
+}
+</div>
+
+<script src="~/js/site.js"></script>

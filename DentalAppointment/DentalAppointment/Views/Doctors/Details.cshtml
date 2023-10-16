@@ -9,6 +9,7 @@
 @{
     // Предположим, у вас есть модель с полем Name
     var serializedModel = JsonSerializer.Serialize(Model.Doctor.Name);
+    var DoctorsFullName = $"{Model.Doctor.Surname} {Model.Doctor.Name} {Model.Doctor.MiddleName}";
 }
 
 @{
@@ -83,6 +84,62 @@
 
 </style>
 
+<section style="background-color: #eee;">
+    <div class="row">
+      <div class="col-lg-4">
+        <div class="card mb-4">
+          <div class="card-body text-center">
+            <img src="@Model.Doctor.ImageLink" alt="avatar"
+                 class="rounded-circle img-fluid" style="width: 150px;">
+            <h5 class="my-3">@DoctorsFullName</h5>
+            <p class="text-muted mb-1">@Model.Doctor.Specialization</p>
+            <p class="text-muted mb-4">@Model.Doctor.Age</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-8">
+        <div class="card mb-4">
+          <div class="card-body">
+            <div class="row">
+              <div class="col-sm-3">
+                <p class="mb-0">Full Name</p>
+              </div>
+              <div class="col-sm-9">
+                <p class="text-muted mb-0">@DoctorsFullName</p>
+              </div>
+            </div>
+            <hr>
+            <div class="row">
+              <div class="col-sm-3">
+                <p class="mb-0">Email</p>
+              </div>
+              <div class="col-sm-9">
+                <p class="text-muted mb-0">@Model.Doctor.Email</p>
+              </div>
+            </div>
+            <hr>
+            <div class="row">
+              <div class="col-sm-3">
+                <p class="mb-0">Phone</p>
+              </div>
+              <div class="col-sm-9">
+                <p class="text-muted mb-0">@Model.Doctor.PhoneNumber</p>
+              </div>
+            </div>
+            <hr>
+            <hr>
+            <div class="row">
+              <div class="col-sm-3">
+                <p class="mb-0">Bio:</p>
+                <p class="text-muted mb-0">@Model.Doctor.Info</p>
+              </div>
+            </div>
+        </div>
+        </div>
+    </div>
+  </div>
+</section>
+
 <table>
   <tr>
       @for (int i = 0; i < 7; i++) {
@@ -140,65 +197,55 @@
   </tr>
 </table>
 
-<!-- Это элемент, который будет показываться как карточка -->
 <div id="confirm-card" class="confirm-card">
-  <!-- Это элемент, который будет содержать текст сообщения -->
   <div id="confirm-message" class="confirm-message"></div>
-  <!-- Это элемент, который будет содержать две кнопки -->
   <div class="confirm-buttons">
-    <!-- Это кнопка для подтверждения -->
     <button id="confirm-yes" class="confirm-yes">Подтвердить</button>
-    <!-- Это кнопка для отклонения -->
     <button id="confirm-no" class="confirm-no">Отклонить</button>
   </div>
 </div>
+
 <script>
   function confirmBooking(button) {
-    var time = button.getAttribute("data-time");
-    var date = button.getAttribute("data-date");
-    var doctorId = @Model.Doctor.Id;
-    var serializedModel = @Html.Raw(serializedModel);
-    var message = "Вы хотите записаться на прием к доктору с айди " + serializedModel + " на время " + time + "?";
-    // Получаем элементы карточки, сообщения и кнопок
-    var card = document.getElementById("confirm-card");
-    var messageElement = document.getElementById("confirm-message");
-    var yesButton = document.getElementById("confirm-yes");
-    var noButton = document.getElementById("confirm-no");
-    // Устанавливаем текст сообщения в элементе
+    let time = button.getAttribute("data-time");
+    let date = button.getAttribute("data-date");
+    let doctorId = @Model.Doctor.Id;
+    let serializedModel = @Html.Raw(serializedModel);
+    let message = "Вы хотите записаться на прием к доктору с айди " + serializedModel + " на время " + time + "?";
+    let card = document.getElementById("confirm-card");
+    let messageElement = document.getElementById("confirm-message");
+    let yesButton = document.getElementById("confirm-yes");
+    let noButton = document.getElementById("confirm-no");
     messageElement.textContent = message;
-    // Показываем карточку, устанавливая свойство display в block
     card.style.display = "block";
-    // Добавляем обработчик события click для кнопки подтверждения
+
     yesButton.onclick = function() {
-      // Скрываем карточку, устанавливая свойство display в none
+
       card.style.display = "none";
-      // Отправляем запрос на сервер для создания записи, как и раньше
-      var form = document.createElement("form");
+
+      let form = document.createElement("form");
       form.method = "post";
       form.action = "/Appointment/Create";
-      var inputDate = document.createElement("input");
+      let inputDate = document.createElement("input");
       inputDate.type = "hidden";
       inputDate.name = "AppointmentDate";
       inputDate.value = button.getAttribute("data-date"); 
       form.appendChild(inputDate);
-      var inputTime = document.createElement("input");
+      let inputTime = document.createElement("input");
       inputTime.type = "hidden";
-      inputTime.name = "AppointmentTime"; // изменил имя параметра на DoctorId
+      inputTime.name = "AppointmentTime";
       inputTime.value = time;
       form.appendChild(inputTime);
-      var inputDoctorId = document.createElement("input");
+      let inputDoctorId = document.createElement("input");
       inputDoctorId.type = "hidden";
-      inputDoctorId.name = "DoctorId"; // изменил имя параметра на DoctorId
+      inputDoctorId.name = "DoctorId";
       inputDoctorId.value = doctorId;
       form.appendChild(inputDoctorId);
       document.body.appendChild(form);
       form.submit();
     }
-    // Добавляем обработчик события click для кнопки отклонения
     noButton.onclick = function() {
-      // Скрываем карточку, устанавливая свойство display в none
       card.style.display = "none";
-      // Возвращаем false, чтобы отменить действие по умолчанию
       return false;
     }
   }

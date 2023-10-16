@@ -1,9 +1,12 @@
-﻿namespace DAL.Interfaces;
+﻿using Microsoft.EntityFrameworkCore;
 
-public interface IRepository<T>
+namespace DAL.Interfaces;
+
+public interface IRepository<T> where T : class
 {
-    public List<T> GetAll();
-    public void Add(T item);
-    public T? FindById(int id);
+    List<T> GetAllAsList();
+    DbSet<T> GetAllAsTable();
+    void Add(T item);
+    T? FindById(int id);
     void SaveChanges();
 }

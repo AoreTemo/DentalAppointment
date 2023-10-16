@@ -5,7 +5,7 @@ using BLL.Interface;
 
 namespace BLL.Services;
 
-public abstract class GenericService<T> : IGenericService<T>
+public abstract class GenericService<T> : IGenericService<T> where T : class
 {
     protected IRepository<T> _repository;
 
@@ -13,8 +13,7 @@ public abstract class GenericService<T> : IGenericService<T>
     {
         _repository = repository;
     }
-
-
+    
     public void Add(T item)
     {
         _repository.Add(item);
@@ -30,7 +29,7 @@ public abstract class GenericService<T> : IGenericService<T>
 
     public List<T> GetByPredicate(Expression<Func<T, bool>> filter = null, Expression<Func<IQueryable<T>, IOrderedQueryable<T>>> orderBy = null)
     {
-        var query = _repository.GetAll().AsQueryable();
+        var query = _repository.GetAllAsList().AsQueryable();
         if (filter != null)
         {
             query = query.Where(filter);

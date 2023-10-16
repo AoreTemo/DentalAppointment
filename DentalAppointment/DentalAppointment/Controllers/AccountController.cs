@@ -1,8 +1,11 @@
+using System.Security.Claims;
+using BLL.Services;
 using Core;
 using Core.Models;
 using DentalAppointment.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace DentalAppointment.Controllers;
 
@@ -11,14 +14,29 @@ public class AccountController : Controller
     private readonly UserManager<AppUser>   _userManager;
     private readonly SignInManager<AppUser> _signInManager;
     private readonly RoleManager<IdentityRole> _roleManager;
+    private readonly AppointmentService _appointmentService;
 
-    public AccountController(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, RoleManager<IdentityRole> roleManager)
+    public AccountController(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, RoleManager<IdentityRole> roleManager, AppointmentService appointmentService)
     {
         _userManager = userManager;
         _signInManager = signInManager;
         _roleManager = roleManager;
+        _appointmentService = appointmentService;
     }
 
+    // GET
+    [HttpGet]
+    public IActionResult Info()
+    {
+        var userId = User.FindFirst(ClaimTypes.NameIdentifier)!.Value;
+
+        var appointments = _appointmentService.GetByPredicate(
+                a => a.AppUserId == userId
+            );
+    
+        return View(appointments);
+    }
+    
     // GET
     [HttpGet]
     public IActionResult Login()

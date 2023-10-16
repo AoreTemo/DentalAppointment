@@ -48,9 +48,16 @@ public class Repository<T> : IRepository<T> where T : class
         _context.SaveChanges();
     }
 
-    public List<T> GetAll()
+    public List<T> GetAllAsList()
     {
         var resultList = _table.ToList();
+
+        return resultList;
+    }
+    
+    public DbSet<T> GetAllAsTable()
+    {
+        var resultList = _table;
 
         return resultList;
     }
