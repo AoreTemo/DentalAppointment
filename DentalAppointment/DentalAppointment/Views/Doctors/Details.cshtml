@@ -181,8 +181,8 @@
   </tr> 
   <tr>
     @for (var i = 0; i < 7; i++) {
-       var date = firstDayOfWeek.AddDays(i); // получаем дату для текущей ячейки
-       var dateString = date.ToString("yyyy-MM-dd"); // преобразуем дату в строку с нужным форматом
+      var date = nextWeek.AddDays(i); // получаем дату для текущей ячейки
+      var dateString = date.ToString("yyyy-MM-dd"); // преобразуем дату в строку с нужным форматом
        <td style="text-align: center;">
        @for (int j = 0, h = 10; j < 5; j++, h++)
        {

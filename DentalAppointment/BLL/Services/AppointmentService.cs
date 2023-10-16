@@ -30,5 +30,24 @@ public class AppointmentService : GenericService<Appointment>, IAppointmentServi
         }
         return query.ToList();
     }
+    
+    public Appointment GetNearestAppointment()
+    {
+        var appointments = GetByPredicate();
+        // Order the appointments by date and time.
+        appointments.Sort((a, b) => a.AppointmentDate.CompareTo(b.AppointmentDate));
+
+        // Find the first appointment in the future.
+        foreach (Appointment appointment in appointments)
+        {
+            if (appointment.AppointmentDate >= DateTime.Now)
+            {
+                return appointment;
+            }
+        }
+
+        // If there are no appointments in the future, return null.
+        return null;
+    }
 }
 

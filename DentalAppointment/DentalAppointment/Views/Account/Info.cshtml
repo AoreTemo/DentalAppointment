@@ -1,8 +1,13 @@
+@using BLL.Services
 @model System.Collections.Generic.List<Core.Models.Appointment>
-
+@inject AppointmentService _appointmentService;
 @{
     ViewBag.Title = "Info";
     Layout = "_Layout";
+}
+
+@{
+    var nearestAppointment = _appointmentService.GetNearestAppointment();
 }
 
 <h2>Appointments</h2>
