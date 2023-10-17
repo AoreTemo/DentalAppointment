@@ -1,4 +1,11 @@
-﻿.login-container{
+﻿.login-back {
+    background-image: url();
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: cover;
+}
+
+.login-container {
     max-width: 1220px;
     margin: 0 auto;
     padding: 0 10px;
@@ -23,7 +30,8 @@
 }
 
     .form:hover {
-        box-shadow: -7px 4px 28px -3px #3e4f6a;
+         box-shadow: -7px -7px 28px -5px #3e4f6a;
+
     }
 
 .form-title{
@@ -72,6 +80,12 @@
 
 .form-control:focus ~ .login-lable,
 .form-control:valid ~ .login-lable{
+    top: -25px;
+    font-size: 14px;
+    color: #0e94f4;
+}
+
+.lable-active {
     top: -25px;
     font-size: 14px;
     color: #0e94f4;

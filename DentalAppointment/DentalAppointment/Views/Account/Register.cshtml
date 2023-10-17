@@ -7,67 +7,72 @@
 
 <h1>Register</h1>
 <link rel="stylesheet" href="/css/RegisterPage.css" />
+<main>
+        <div class="Register-form">
+            <div class="Register-container">
+                @*<@*div class="row g-5">*@
+                <div class="col-md-7 col-lg-8">
+                    <form method="post" asp-action="Register" enctype="multipart/form-data" class="form">
+                        <div class="row g-3">
+                            <div class="group">
+                                <div class="col-12">
+                                    @*<label asp-for="FirstName" class="form-label">First name</label>*@
+                                    <input asp-for="FirstName" type="text" class="form-control"
+                                       required>
+                                    <span asp-validation-for="FirstName" class="highlight"></span>
+                                    <label class="register-lable">Write your First name</label>
+                                </div>
+                            </div>
+                            <div class="group">
+                                <div class="col-12">
+                                    @*<label asp-for="LastName" class="form-label">Last name</label>*@
+                                    <input asp-for="LastName" type="text" class="form-control"
+                                       required>
+                                    <span asp-validation-for="LastName" class="highlight"></span>
+                                    <label class="register-lable">Write your Last name</label>
+                                </div>
+                            </div>
+                            <div class="group">
+                                <div class="col-12">
+                                    @*<label asp-for="Age" class="form-label">Age</label>*@
+                                    <input asp-for="Age" type="number" min="0" max="120" step="1"
+                                       class="form-control" required>
+                                    <span asp-validation-for="Age" class="highlight"></span>
+                                    <label class="register-lable">Write an Age</label>
+                                </div>
+                            </div>
+                            <div class="group">
+                                <div class="col-12">
+                                    @*<label asp-for="Email" class="form-label">Email</label>*@
+                                    <input asp-for="Email" class="form-control" required>
+                                    <span asp-validation-for="Email" class="highlight"></span>
+                                    <label class="register-lable">Write an Email</label>
+                                </div>
+                            </div>
+                            <div class="group">
+                                <div class="col-12">
+                                    @*<label asp-for="Password" class="form-label">Password</label>*@
+                                    <input asp-for="Password" type="password" class="form-control"
+                                       required>
+                                    <span asp-validation-for="Password" class="highlight"></span>
+                                    <label class="register-lable">Write an Password</label>
+                                </div>
+                            </div>
+                            <div class="group">
+                                <div class="col-12">
+                                    @*<label asp-for="ConfirmPassword" class="form-label">Password confirm</label>*@
+                                    <input asp-for="ConfirmPassword" type="password" class="form-control"
+                                       required>
+                                    <span asp-validation-for="ConfirmPassword" class="highlight"></span>
+                                    <label class="register-lable">Confirm password</label>
+                                </div>
 
-<div class="container">
-    <main>
-        <div class="Register-container"></div>
-        @*<@*div class="row g-5">*@
-        <div class="col-md-7 col-lg-8">
-            <form method="post" asp-action="Register" enctype="multipart/form-data" class="form">
-                <div class="row g-3">
 
-                    <div class="col-12">
-                        @*<label asp-for="FirstName" class="form-label">First name</label>*@
-                        <input asp-for="FirstName" type="text" class="form-control"
-                               placeholder="First name" required>
-                        <span asp-validation-for="FirstName" class="highlight"></span>
-                        <label class="register-lable">Write your First name</label>
-                    </div>
-
-                    <div class="col-12">
-                        @*<label asp-for="LastName" class="form-label">Last name</label>*@
-                        <input asp-for="LastName" type="text" class="form-control"
-                               placeholder="Last name" required>
-                        <span asp-validation-for="LastName" class="highlight"></span>
-                        <label class="register-lable">Write your Last name</label>
-                    </div>
-
-                    <div class="col-12">
-                        @*<label asp-for="Age" class="form-label">Age</label>*@
-                        <input asp-for="Age" type="number" min="0" max="120" step="1"
-                               class="form-control" placeholder="Age" required>
-                        <span asp-validation-for="Age" class="highlight"></span>
-                        <label class="register-lable">Write an Age</label>
-                    </div>
-
-                    <div class="col-12">
-                        @*<label asp-for="Email" class="form-label">Email</label>*@
-                        <input asp-for="Email" class="form-control" placeholder="Email" required>
-                        <span asp-validation-for="Email" class="highlight"></span>
-                        <label class="register-lable">Write an Email</label>
-                    </div>
-
-                    <div class="col-12">
-                        @*<label asp-for="Password" class="form-label">Password</label>*@
-                        <input asp-for="Password" type="password" class="form-control"
-                               placeholder="Password" required>
-                        <span asp-validation-for="Password" class="highlight"></span>
-                        <label class="register-lable">Write an Password</label>
-                    </div>
-
-                    <div class="col-12">
-                        @*<label asp-for="ConfirmPassword" class="form-label">Password confirm</label>*@
-                        <input asp-for="ConfirmPassword" type="password" class="form-control"
-                               placeholder="Confirm the password" required>
-                        <span asp-validation-for="ConfirmPassword" class="highlight"></span>
-                        <label class="register-lable">Confirm password</label>
-                    </div>
-
-
-                    <button class="w-100 btn btn-primary btn-lg" type="submit">Sign up</button>
+                                <button class="w-100 btn btn-primary btn-lg" type="submit">Sign up</button>
+                            </div>
+                    </form>
                 </div>
-            </form>
+                @*  </div>*@
+            </div>
         </div>
-        @*  </div>*@
     </main>
-</div>
