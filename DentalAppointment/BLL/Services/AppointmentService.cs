@@ -90,15 +90,8 @@ public class AppointmentService : GenericService<Appointment>, IAppointmentServi
         // Order the appointments by date and time.
         appointments.Sort((a, b) =>
         {
-            // Compare the appointment dates.
             var dateComparison = a.AppointmentDate.CompareTo(b.AppointmentDate);
-            if (dateComparison != 0)
-            {
-                return dateComparison;
-            }
-
-            // If the appointment dates are the same, compare the appointment times.
-            return a.AppointmentTime.CompareTo(b.AppointmentTime);
+            return dateComparison != 0 ? dateComparison : a.AppointmentTime.CompareTo(b.AppointmentTime);
         });
 
         // Find the first appointment in the future.

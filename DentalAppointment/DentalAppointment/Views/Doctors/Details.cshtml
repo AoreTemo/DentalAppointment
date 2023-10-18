@@ -1,6 +1,7 @@
 @using System.Text.Json
 @using Core.Models;
 @using Microsoft.AspNetCore.Identity;
+@using Microsoft.EntityFrameworkCore
 @model DentalAppointment.ViewModels.DetailsViewModel
 
 @{
@@ -16,14 +17,18 @@
 
 }
 
-@{
-    // Get the current date
-    var today = DateTime.Today;
-    // Get the first day of the current week
-    var firstDayOfWeek = today.AddDays(-(int)today.DayOfWeek);
-    // Get the first day of the next week
-    var nextWeek = firstDayOfWeek.AddDays(7);
+@{ // Получаем текущую дату
+    var today = DateTime.Today; // Вычисляем смещение относительно понедельника 
+    var nextWeek = today.AddDays(7);
 }
+@* @{ *@
+@*     // Get the current date *@
+@*     var today = DateTime.Today; *@
+@*     // Get the first day of the current week *@
+@*     var firstDayOfWeek = today.AddDays(-(int)today.DayOfWeek); *@
+@*     // Get the first day of the next week *@
+@*     var nextWeek = firstDayOfWeek.AddDays(7); *@
+@* } *@
 
 <style>
     table {
@@ -167,6 +172,12 @@
         position: relative;
     }
 
+    #get-appointment-button:disabled, 
+    #get-appointment-button:disabled:hover {
+        background-color: gray;
+        cursor: unset;
+    }
+
 
     .warn-mes-text {
         margin-left: 20px;
@@ -198,11 +209,11 @@
         overflow: hidden;
     }
 
-        .cssbuttons-io svg {
-            width: 1.2em;
-            height: 1.2em;
-            margin-right: 0.5em;
-        }
+    .cssbuttons-io svg {
+        width: 1.2em;
+        height: 1.2em;
+        margin-right: 0.5em;
+    }
 
         .cssbuttons-io span {
             position: relative;
@@ -310,32 +321,46 @@
 {
     <table>
         <tr>
-            @for (int i = 0; i < 7; i++)
+                
+            @for (var i = 0; i < 7; i++)
+            {
+                var date = today.AddDays(i);
+                var nameOfDay = date.DayOfWeek.ToString();
+                var formattedDate = date.ToString("dd.MM.yyyy");
+                <th style="text-align: center;">@nameOfDay <br/>@formattedDate</th>
+            }
+        </tr>
+        @*<tr>
+            @for (var i = 0; i < 7; i++)
             {
                 var date = firstDayOfWeek.AddDays(i);
                 var formattedDate = date.ToString("dddd dd.MM");
                 <th style="text-align: center;">@formattedDate</th>
             }
-        </tr>
+        </tr>*@
         <tr>
             @for (var i = 0; i < 7; i++)
             {
-                var date = firstDayOfWeek.AddDays(i); // получаем дату для текущей ячейки
-                var dateString = date.ToString("yyyy-MM-dd"); // преобразуем дату в строку с нужным форматом
+                var date = today.AddDays(i); // получаем дату для текущей ячейки
+                var dateString = date.ToString("dd.MM.yyyy"); // преобразуем дату в строку с нужным форматом
                 <td style="text-align: center;">
                     @for (int j = 0, h = 10; j < 5; j++, h++)
                     {
                         var dataTime = DateTime.Now.Date + new TimeSpan(h, 0, 0);
-
+                        var timeAsString = dataTime.ToString("HH:mm");
+                        
                         // Проверяем, существует ли уже appointment с такой датой и временем
-                        var appointmentExists = Model.Appointments.Where(
-                        a => a.AppointmentDate == date && a.AppointmentTime == dataTime.TimeOfDay
-                        ).Any();
+                        var appointmentExists = Model.Appointments.Any(
+                            a => a.AppointmentDate == date && 
+                                 a.AppointmentTime == dataTime.TimeOfDay ||
+                                 (date == DateTime.Now.Date && 
+                                  dataTime.TimeOfDay.TotalSeconds <= DateTime.Now.TimeOfDay.TotalSeconds)
+                            );
 
                         // Если appointment существует, то отключаем кнопку
                         var disabled = appointmentExists ? "disabled" : "";
 
-                        <button type="submit" class="nav-link-but" data-date="@dateString" data-time="@dataTime" onclick="return confirmBooking(this)" @disabled>
+                        <button type="submit" id="get-appointment-button" class="nav-link-but" data-date="@date" data-time="@timeAsString" onclick="return confirmBooking(this)" style="margin: auto" @disabled>
                             @h:00
                         </button>
 
@@ -344,33 +369,42 @@
                 </td>
             }
         </tr>
-        <tr>
+        <tr> 
+            @for (var i = 0; i < 7; i++)
+            {
+                var date = nextWeek.AddDays(i); 
+                var nameOfDay = date.DayOfWeek.ToString();
+                var formattedDate = date.ToString("dd.MM.yyyy");
+                <th style="text-align: center;">@nameOfDay <br/>@formattedDate</th>
+            } 
+        </tr>
+        @*<tr>
             @for (var i = 0; i < 7; i++)
             {
                 var date = nextWeek.AddDays(i);
                 var formattedDate = date.ToString("dddd dd.MM");
                 <th style="text-align: center;">@formattedDate</th>
             }
-        </tr>
+        </tr>*@
         <tr>
             @for (var i = 0; i < 7; i++)
             {
                 var date = nextWeek.AddDays(i); // получаем дату для текущей ячейки
-                var dateString = date.ToString("yyyy-MM-dd"); // преобразуем дату в строку с нужным форматом
+                var dateString = date.ToString("dd.MM.yyyy"); // преобразуем дату в строку с нужным форматом
                 <td style="text-align: center;">
                     @for (int j = 0, h = 10; j < 5; j++, h++)
                     {
-                        var dataTime = DateTime.Now.Date + new TimeSpan(h, 0, 0);
-
+                        var dataTime = (DateTime.Now.Date + new TimeSpan(h, 0, 0));
+                        var timeAsString = dataTime.ToString("HH:mm");
+                        
                         // Проверяем, существует ли уже appointment с такой датой и временем
-                        var appointmentExists = Model.Appointments.Where(
-                        a => a.AppointmentDate == date && a.AppointmentTime == dataTime.TimeOfDay
-                        ).Any();
+                        var appointmentExists = Model.Appointments.Any(a => a.AppointmentDate == date && a.AppointmentTime == dataTime.TimeOfDay ||
+                                                                            (date == DateTime.Now && dataTime.TimeOfDay <= DateTime.Now.TimeOfDay));
 
                         // Если appointment существует, то отключаем кнопку
                         var disabled = appointmentExists ? "disabled" : "";
 
-                        <button type="submit" class="nav-link-but" data-date="@dateString" data-time="@dataTime" onclick="return confirmBooking(this)" @disabled>
+                        <button type="submit" id="get-appointment-button"  class="nav-link-but" data-date="@date" data-time="@timeAsString" onclick="return confirmBooking(this)" style="margin: auto" @disabled>
                             @h:00
                         </button>
 
@@ -416,7 +450,7 @@ else
         let date = button.getAttribute("data-date");
         let doctorId = @Model.Doctor.Id;
         let serializedModel = @Html.Raw(serializedModel);
-        let message = "Вы хотите записаться на прием к доктору с айди " + serializedModel + " на время " + time + "?";
+        let message = "You want to get the appointment to doctor " + serializedModel + ".\nDate: " + date + "\nTime: " + time + "?";
         let card = document.getElementById("confirm-card");
         let messageElement = document.getElementById("confirm-message");
         let yesButton = document.getElementById("confirm-yes");
