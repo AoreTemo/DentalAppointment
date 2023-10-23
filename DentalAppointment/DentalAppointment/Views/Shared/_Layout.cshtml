@@ -4,7 +4,6 @@
 @inject SignInManager<AppUser> SignInManager
 
 <!DOCTYPE html>
-<html lang="en">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -20,10 +19,10 @@
 <body>
     <header class="header">
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow ">
+            <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">
+             <img src="/photos/Tooth.png" class="Tooth-header">
+            </a>
             <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">
-                    <img src="photos/Tooth.png" class="Tooth-header" />
-                </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -42,14 +41,14 @@
                         {
                             <li class="nav-item-button">
                                 <form asp-area="" asp-controller="Account" asp-action="Info" method="get">
-                                    <button type="submit" class="nav-link-but">Account</button>
+                                    <button type="submit" class="nav-link-but nav-link-but-log">Account</button>
                                 </form>
                             </li>
                             <li class="nav-item-button">
                                 <form asp-area="" asp-controller="Account" asp-action="LogOut" method="get">
                                     <button type="submit" class="nav-link-but nav-link-but-log">Log out</button>
                                 </form>
-                           </li>
+                            </li>
                         }
                         else
                         {
@@ -69,11 +68,11 @@
             </div>
         </nav>
     </header>
-    <main role="main" class="pb-3">
+    <main id="mainmain" role="main" class="pb-0">
         @RenderBody()
     </main>
-    <footer class="border-top footer text-muted">
-        <div class="container">
+    <footer class="border-top-black footer text-muted">
+        <div class="container text-dark">
             &copy; 2023 - DentalAppointment - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
         </div>
     </footer>
@@ -82,4 +81,4 @@
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
-</html>
+

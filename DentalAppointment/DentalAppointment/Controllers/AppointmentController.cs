@@ -2,7 +2,6 @@ using System.Security.Claims;
 using BLL.Services;
 using Core.Models;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Identity;
 
 namespace DentalAppointment.Controllers;
 
@@ -25,7 +24,7 @@ public class AppointmentController : Controller
 
     // POST: /Appointments/Create
     [HttpPost]
-    public IActionResult Create(DateTime AppointmentDate, DateTime AppointmentTime, int DoctorId)
+    public IActionResult Create(DateTime appointmentDate, DateTime appointmentTime, int DoctorId)
     {
         var doctor = _doctorService.GetById(DoctorId);
         if (doctor == null)
@@ -34,7 +33,7 @@ public class AppointmentController : Controller
         }
 
         var existingAppointment = _appointmentService.GetByPredicate(
-            a => a.AppointmentDate == AppointmentDate && a.AppointmentTime == DateTime.Parse(AppointmentTime.ToString("HH:mm:ss")).TimeOfDay && a.DoctorId == DoctorId).ToList().FirstOrDefault(); 
+            a => a.AppointmentDate == appointmentDate && a.AppointmentTime == DateTime.Parse(appointmentTime.ToString("HH:mm:ss")).TimeOfDay && a.DoctorId == DoctorId).ToList().FirstOrDefault(); 
         if (existingAppointment != null)
         {
             return Conflict();
@@ -47,8 +46,8 @@ public class AppointmentController : Controller
 
         var appointment = new Appointment
         {
-            AppointmentDate = AppointmentDate, 
-            AppointmentTime = AppointmentTime.TimeOfDay, 
+            AppointmentDate = appointmentDate, 
+            AppointmentTime = appointmentTime.TimeOfDay, 
             DoctorId = DoctorId, 
             AppUserId = User.FindFirst(ClaimTypes.NameIdentifier)!.Value
         };

@@ -15,12 +15,17 @@
     font-size: 14px;
     font-family: "Anonymous Pro";
 }
-
+.header {
+    background-color: #b983e6;
+    border-bottom: 3px solid black;
+}
 .Tooth-header {
     width: 50%;
 }
+
 .nav-link-but {
-    border: none;
+    border: 3px solid black;
+    text-decoration: none;
     border-radius: 5px;
     padding: 10px 20px;
     font-size: 24px;
@@ -29,8 +34,12 @@
     cursor: pointer;
     transition: background-color 0.3s;
     margin-right: 20px;
+    height: 60.8px;
 }
-
+.footer {
+    background-color: #b983e6;
+    border-top: 3px solid black;
+}
 .nav-link-but:hover{
     background-color: #77dd77;
 }
@@ -39,9 +48,6 @@
     background-color:#f2837c
 }
 
-main{
-    margin:0;
-}
 
 .home-main{
     background-color: #f0f0f0;
