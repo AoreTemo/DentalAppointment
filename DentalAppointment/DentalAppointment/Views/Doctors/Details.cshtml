@@ -360,7 +360,7 @@
                 <td style="text-align: center;">
                     @for (int j = 0, h = 10; j < 5; j++, h++)
                     {
-                        var dataTime = DateTime.Now.Date + new TimeSpan(h, 0, 0);
+                        var dataTime = date.Date + new TimeSpan(h, 0, 0);
 
                         // Проверяем, существует ли уже appointment с такой датой и временем
                         var appointmentExists = Model.Appointments.Where(

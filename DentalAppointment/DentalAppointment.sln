@@ -3,13 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.6.33829.357
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DentalAppointment", "DentalAppointment\DentalAppointment.csproj", "{8C45F3AC-AC3A-4032-93CE-FE71BB2F5A4B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DentalAppointment", "DentalAppointment\DentalAppointment.csproj", "{8C45F3AC-AC3A-4032-93CE-FE71BB2F5A4B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DAL", "DAL\DAL.csproj", "{B3FE8EB3-4059-4014-9359-3DD3DD76ABD0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DAL", "DAL\DAL.csproj", "{B3FE8EB3-4059-4014-9359-3DD3DD76ABD0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BLL", "BLL\BLL.csproj", "{F2E4028D-C28D-4D49-B4C9-0565D39A8B27}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BLL", "BLL\BLL.csproj", "{F2E4028D-C28D-4D49-B4C9-0565D39A8B27}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core", "Core\Core.csproj", "{443070FF-8EF9-41CE-B7A2-1CE5540BAB22}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Core", "Core\Core.csproj", "{443070FF-8EF9-41CE-B7A2-1CE5540BAB22}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
