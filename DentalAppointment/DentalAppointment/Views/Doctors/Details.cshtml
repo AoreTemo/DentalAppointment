@@ -349,7 +349,6 @@
                         var dataTime = DateTime.Now.Date + new TimeSpan(h, 0, 0);
                         var timeAsString = dataTime.ToString("HH:mm");
                         
-                        // Проверяем, существует ли уже appointment с такой датой и временем
                         var appointmentExists = Model.Appointments.Any(
                             a => a.AppointmentDate == date && 
                                  a.AppointmentTime == dataTime.TimeOfDay ||
@@ -357,7 +356,6 @@
                                   dataTime.TimeOfDay.TotalSeconds <= DateTime.Now.TimeOfDay.TotalSeconds)
                             );
 
-                        // Если appointment существует, то отключаем кнопку
                         var disabled = appointmentExists ? "disabled" : "";
 
                         <button type="submit" id="get-appointment-button" class="nav-link-but" data-date="@date" data-time="@timeAsString" onclick="return confirmBooking(this)" style="margin: auto" @disabled>

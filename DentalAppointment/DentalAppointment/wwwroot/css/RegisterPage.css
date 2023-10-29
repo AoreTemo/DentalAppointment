@@ -1,11 +1,14 @@
-﻿.Register-container {
+﻿.register-back {
+    background-color: #8b62ac;
+}
+
+.Register-container {
     max-width: 1220px;
     margin: 100px auto;
     padding: 0 10px;
     display: flex;
     justify-content: center;
 }
-
 .form {
     max-width: 570px;
     margin: 0 auto;
