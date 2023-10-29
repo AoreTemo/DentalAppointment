@@ -55,8 +55,6 @@
         left: 50%; /* Установить левый край элемента по центру экрана */
         top: 50%; /* Установить верхний край элемента по центру экрана */
         transform: translate(-50%, -50%); /* Сместить элемент на половину его ширины и высоты влево и вверх, чтобы центрировать его */
-        width: 300px; /* Установить ширину элемента */
-        height: 200px; /* Установить высоту элемента */
         background-color: white; /* Установить цвет фона элемента */
         border: 1px solid black; /* Установить цвет и толщину границы элемента */
         box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2); /* Установить тень для элемента */
@@ -73,22 +71,6 @@
         display: flex; /* Установить тип отображения элемента как flex, чтобы выравнивать его дочерние элементы */
         justify-content: space-around; /* Распределить дочерние элементы равномерно по горизонтали */
         align-items: center; /* Выровнять дочерние элементы по вертикали */
-    }
-
-    /* Стили для кнопки подтверждения */
-    .confirm-yes {
-        width: 100px; /* Установить ширину кнопки */
-        height: 40px; /* Установить высоту кнопки */
-        background-color: green; /* Установить цвет фона кнопки */
-        color: white; /* Установить цвет текста кнопки */
-    }
-
-    /* Стили для кнопки отклонения */
-    .confirm-no {
-        width: 100px; /* Установить ширину кнопки */
-        height: 40px; /* Установить высоту кнопки */
-        background-color: red; /* Установить цвет фона кнопки */
-        color: white; /* Установить цвет текста кнопки */
     }
 
     .pb-3{
@@ -330,14 +312,6 @@
                 <th style="text-align: center;">@nameOfDay <br/>@formattedDate</th>
             }
         </tr>
-        @*<tr>
-            @for (var i = 0; i < 7; i++)
-            {
-                var date = firstDayOfWeek.AddDays(i);
-                var formattedDate = date.ToString("dddd dd.MM");
-                <th style="text-align: center;">@formattedDate</th>
-            }
-        </tr>*@
         <tr>
             @for (var i = 0; i < 7; i++)
             {
@@ -350,15 +324,13 @@
                         var timeAsString = dataTime.ToString("HH:mm");
                         
                         var appointmentExists = Model.Appointments.Any(
-                            a => a.AppointmentDate == date && 
-                                 a.AppointmentTime == dataTime.TimeOfDay ||
-                                 (date == DateTime.Now.Date && 
-                                  dataTime.TimeOfDay.TotalSeconds <= DateTime.Now.TimeOfDay.TotalSeconds)
-                            );
+                            a => (a.AppointmentDate == date && a.AppointmentTime == dataTime.TimeOfDay)) || 
+                                                (date == DateTime.Now.Date && dataTime.TimeOfDay <= DateTime.Now.TimeOfDay);
 
                         var disabled = appointmentExists ? "disabled" : "";
 
-                        <button type="submit" id="get-appointment-button" class="nav-link-but" data-date="@date" data-time="@timeAsString" onclick="return confirmBooking(this)" style="margin: auto" @disabled>
+                        <button type="submit" id="get-appointment-button" class="nav-link-but" data-date="@date" 
+                                data-date-view="@date.ToString("dd.MM.yyyy")" data-time="@timeAsString" onclick="return confirmBooking(this)" style="margin: auto" @disabled>
                             @h:00
                         </button>
 
@@ -402,7 +374,8 @@
                         // Если appointment существует, то отключаем кнопку
                         var disabled = appointmentExists ? "disabled" : "";
 
-                        <button type="submit" id="get-appointment-button"  class="nav-link-but" data-date="@date" data-time="@timeAsString" onclick="return confirmBooking(this)" style="margin: auto" @disabled>
+                        <button type="submit" id="get-appointment-button"  class="nav-link-but" data-date="@date" 
+                                data-date-view="@date.ToString("dd.MM.yyyy")" data-time="@timeAsString" onclick="return confirmBooking(this)" style="margin: auto" @disabled>
                             @h:00
                         </button>
 
@@ -413,11 +386,21 @@
         </tr>
 
     </table>
-    <div id="confirm-card" class="confirm-card">
-        <div id="confirm-message" class="confirm-message"></div>
-        <div class="confirm-buttons">
-            <button id="confirm-yes" class="confirm-yes">Подтвердить</button>
-            <button id="confirm-no" class="confirm-no">Отклонить</button>
+    @* <div id="confirm-card" class="card confirm-card"> *@
+    @*     <div id="confirm-message" class="confirm-message"></div> *@
+    @*     <div class="confirm-buttons"> *@
+    @*         <button id="confirm-yes" class="confirm-yes">Подтвердить</button> *@
+    @*         <button id="confirm-no" class="confirm-no">Отклонить</button> *@
+    @*     </div> *@
+    @* </div> *@
+    <div id="confirm-card" class="card confirm-card" style="width: 18rem;">
+        <div class="card-body">
+            <h5 class="card-title">Confirm appointment</h5>
+            <p id="confirm-message" class="confirm-message card-text"></p>
+            <div class="confirm-buttons">
+                <button type="button" class="btn btn-success" id="confirm-yes">Accept</button>
+                <button type="button" class="btn btn-danger" id="confirm-no">Cancel</button>
+            </div>
         </div>
     </div>
 }
@@ -425,7 +408,7 @@
 else
 {
     <div class="warn-mes">
-        <div class="warn-mes-card">
+        <div class="card warn-mes-card">
             <img src="/photos/warn-mes-img.png" class="warn-mes-img" />
             <div class="warn-mes-content">
                 <h5 class="warn-mes-title">We are sorry</h5>
@@ -446,14 +429,17 @@ else
     function confirmBooking(button) {
         let time = button.getAttribute("data-time");
         let date = button.getAttribute("data-date");
+        let dateView = button.getAttribute("data-date-view");
         let doctorId = @Model.Doctor.Id;
         let serializedModel = @Html.Raw(serializedModel);
-        let message = "You want to get the appointment to doctor " + serializedModel + ".\nDate: " + date + "\nTime: " + time + "?";
+        let messageDoctor = "Doctor: " + serializedModel + ".";
+        let messageDate = "Date: " + dateView + ".";
+        let messageTime = "Time: " + time + ".";
         let card = document.getElementById("confirm-card");
         let messageElement = document.getElementById("confirm-message");
         let yesButton = document.getElementById("confirm-yes");
         let noButton = document.getElementById("confirm-no");
-        messageElement.textContent = message;
+        messageElement.innerHTML += `${messageDoctor}<br />${messageDate}<br />${messageTime}`;
         card.style.display = "block";
 
         yesButton.onclick = function () {

@@ -2,9 +2,12 @@
 @using Microsoft.IdentityModel.Tokens
 @model DentalAppointment.ViewModels.AppUserInfoViewModel
 @inject AppointmentService AppointmentService;
+@inject AppUserService AppUserService;
 @{
     ViewBag.Title = "Info";
     Layout = "_Layout";
+
+    var user = AppUserService.GetByPredicate(u => u.Id == Model.UserId).FirstOrDefault();
 }
 
 @{
@@ -15,6 +18,34 @@
 }
 
 <style>
+    .container-appointments-user {
+        display: flex;
+        padding: 0;
+        margin: 0;
+    }
+    
+    .user-container {
+        display: flex;
+        justify-content: center;
+        padding: 10px;
+        height: 100%;    
+        border: black solid 3px;
+        border-radius: .25rem;
+        margin: 15px;    
+    }
+    
+    #user-card {
+        background-color: #cd90db;
+        /*height: 140px;*/
+        width: 280px;
+        border: black solid 3px;
+        margin: 5px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+        align-content: center;
+    }
+    
     .no-appointments-card{
         padding: 100px 0;
     }
@@ -28,160 +59,171 @@
 </style>
 
 <link href="~/css/AccountInfo.css" rel="stylesheet"/>
-<div class="main-container-info justify-content-center container">
-    @if (plannedAppointments.IsNullOrEmpty() &&
-         currentAppointments.IsNullOrEmpty() &&
-         finishedAppointments.IsNullOrEmpty())
-    {
-        <section class="no-appointments-card container">
-            <div class="no-appointments-container">
-            <div class="card text-center ">
-                <div class="card-header">
-                    You haven't any appointments.
-                </div>
-                <div class="card-body">
-                    <h5 class="card-title">Do you want to make one?</h5>
-                    <p class="card-text">Go on <a asp-action="Index" asp-controller="Doctors">Doctors</a>  page<br/>-> choose the doctor you want to visit<br/>-> choose the day and the time for your future appointment :3 </p>
-                    <a asp-action="Index" asp-controller="Doctors" class="btn btn-primary">Lets check Doctors page</a>
-                </div>
-                <div class="card-footer text-muted">
-                    In our clinic you will get candies 🤫
-                </div>
-            </div>
-            </div>
-        </section>
-    }
-    else
-    {
-        <div class="container">
-    
-            @if (nearestAppointment != null)
-            {
-                var nearestDoctorFullName = $"{nearestAppointment.Doctor.Surname} {nearestAppointment.Doctor.Name} {nearestAppointment.Doctor.MiddleName}";
-                var nearesDoctorSpec = nearestAppointment.Doctor.Specialization;
-                var nearesDate = nearestAppointment.AppointmentDate.Date.ToString("dd.MM.yyyy");
-                var nearesTime = nearestAppointment.AppointmentTime.ToString();
-    
-                <div class="row">
-                    <h2>Nearest</h2>
-                </div>
-                <div class="row row-cols-4 row-cols-sm-4 row-cols-md-4 g-4">
-                    <div class="card card-1 text-light" style="width: 18rem;margin-left:40px;">
+<div class="container-appointments-user container m-auto">
+    <div class="main-container-info justify-content-center container">
+        @if (plannedAppointments.IsNullOrEmpty() &&
+             currentAppointments.IsNullOrEmpty() &&
+             finishedAppointments.IsNullOrEmpty())
+        {
+            <section class="no-appointments-card container">
+                <div class="no-appointments-container">
+                    <div class="card text-center ">
+                        <div class="card-header">
+                            You haven't any appointments.
+                        </div>
                         <div class="card-body">
-                            <h5 class="card-title">Date: @nearesDate<br/>Time: @nearesTime</h5>
-                            <p class="card-text">Doctor:
-                                <a type="button" id="details-btn" class="btn btn-sm btn-outline-light" asp-controller="Doctors"
-                                   asp-action="Details" asp-route-id="@nearestAppointment.DoctorId">
-                                    @nearestDoctorFullName
-                                </a>
-                            </p>
-                            <p class="card-text">Specialization: @nearesDoctorSpec</p>
-                            <p class="card-text">Status: Planned</p>
+                            <h5 class="card-title">Do you want to make one?</h5>
+                            <p class="card-text">Go on <a asp-action="Index" asp-controller="Doctors">Doctors</a>  page<br/>-> choose the doctor you want to visit<br/>-> choose the day and the time for your future appointment :3 </p>
+                            <a asp-action="Index" asp-controller="Doctors" class="btn btn-primary">Lets check Doctors page</a>
+                        </div>
+                        <div class="card-footer text-muted">
+                            In our clinic you will get candies 🤫
                         </div>
                     </div>
                 </div>
-                <br/>
-                <hr/>
-            }
-    
-            @if (!currentAppointments.IsNullOrEmpty())
-            {
-                <div class="row">
-                    <h2>Current</h2>
-                </div>
-                <div class="row row-cols-4 row-cols-sm-4 row-cols-md-4 g-4">
-                    @foreach (var appointment in currentAppointments)
-                    {
-                        var doctorFullName = $"{appointment.Doctor.Surname} {appointment.Doctor.Name} {appointment.Doctor.MiddleName}";
-                        var doctorSpec = appointment.Doctor.Specialization;
-                        var date = appointment.AppointmentDate.Date.ToString("dd.MM.yyyy");
-                        var time = appointment.AppointmentTime.ToString();
-    
-                        <div class="card-current text-light" style="width: 18rem;margin-left:40px;">
-                            <div class="card-body">
-                                <h5 class="card-title">Date: @date<br/>Time: @time</h5>
-                                <p class="card-text">Doctor:
-                                    <a type="button" id="details-btn" class="btn btn-sm btn-outline-light" asp-controller="Doctors"
-                                       asp-action="Details" asp-route-id="@appointment.DoctorId">
-                                        @doctorFullName
-                                    </a>
-                                </p>
-                                <p class="card-text">Specialization: @doctorSpec</p>
-                                <p class="card-text">Status: In progress</p>
-                            </div>
-                        </div>
-    
-                    }
-                </div>
-                <br/>
-                <hr/>
-            }
-    
-            @if (!plannedAppointments.IsNullOrEmpty())
-            {
-                <div class="row">
-                    <h2>Planned</h2>
-                </div>
-                <div class="row row-cols-4 row-cols-sm-4 row-cols-md-4 g-4">
-                    @foreach (var appointment in plannedAppointments)
-                    {
-                        var doctorFullName = $"{appointment.Doctor.Surname} {appointment.Doctor.Name} {appointment.Doctor.MiddleName}";
-                        var doctorSpec = appointment.Doctor.Specialization;
-                        var date = appointment.AppointmentDate.Date.ToString("dd.MM.yyyy");
-                        var time = appointment.AppointmentTime.ToString();
-    
+            </section>
+        }
+        else
+        {
+            <div class="container">
+        
+                @if (nearestAppointment != null)
+                {
+                    var nearestDoctorFullName = $"{nearestAppointment.Doctor.Surname} {nearestAppointment.Doctor.Name} {nearestAppointment.Doctor.MiddleName}";
+                    var nearesDoctorSpec = nearestAppointment.Doctor.Specialization;
+                    var nearesDate = nearestAppointment.AppointmentDate.Date.ToString("dd.MM.yyyy");
+                    var nearesTime = nearestAppointment.AppointmentTime.ToString();
+        
+                    <div class="row">
+                        <h2>Nearest</h2>
+                    </div>
+                    <div class="row row-cols-4 row-cols-sm-4 row-cols-md-4 g-4">
                         <div class="card card-1 text-light" style="width: 18rem;margin-left:40px;">
                             <div class="card-body">
-                                <h5 class="card-title">Date: @date<br/>Time: @time</h5>
+                                <h5 class="card-title">Date: @nearesDate<br/>Time: @nearesTime</h5>
                                 <p class="card-text">Doctor:
                                     <a type="button" id="details-btn" class="btn btn-sm btn-outline-light" asp-controller="Doctors"
-                                       asp-action="Details" asp-route-id="@appointment.DoctorId">
-                                        @doctorFullName
+                                       asp-action="Details" asp-route-id="@nearestAppointment.DoctorId">
+                                        @nearestDoctorFullName
                                     </a>
                                 </p>
-                                <p class="card-text">Specialization: @doctorSpec</p>
+                                <p class="card-text">Specialization: @nearesDoctorSpec</p>
                                 <p class="card-text">Status: Planned</p>
                             </div>
                         </div>
-                    }
-                </div>
-                <br/>
-                <hr/>
-            }
-    
-            @if (!finishedAppointments.IsNullOrEmpty())
-            {
-                <div class="row">
-                    <h2>Finished</h2>
-                </div>
-                <div class="row row-cols-4 row-cols-sm-4 row-cols-md-4 g-4">
-                    @foreach (var appointment in finishedAppointments)
-                    {
-                        var doctorFullName = $"{appointment.Doctor.Surname} {appointment.Doctor.Name} {appointment.Doctor.MiddleName}";
-                        var doctorSpec = appointment.Doctor.Specialization;
-                        var date = appointment.AppointmentDate.Date.ToString("dd.MM.yyyy");
-                        var time = appointment.AppointmentTime.ToString();
-    
-                        <div class="card-finished text-light" style="width: 18rem;margin-left:40px;">
-                            <div class="card-body">
-                                <h5 class="card-title">Date: @date<br/>Time: @time</h5>
-                                <p class="card-text">Doctor:
-                                    <a type="button" id="details-btn" class="btn btn-sm btn-outline-light" asp-controller="Doctors"
-                                       asp-action="Details" asp-route-id="@appointment.DoctorId">
-                                        @doctorFullName
-                                    </a>
-                                </p>
-                                <p class="card-text">Specialization: @doctorSpec</p>
-                                <p class="card-text">Status: Finished</p>
+                    </div>
+                    <br/>
+                    <hr/>
+                }
+        
+                @if (!currentAppointments.IsNullOrEmpty())
+                {
+                    <div class="row">
+                        <h2>Current</h2>
+                    </div>
+                    <div class="row row-cols-4 row-cols-sm-4 row-cols-md-4 g-4">
+                        @foreach (var appointment in currentAppointments)
+                        {
+                            var doctorFullName = $"{appointment.Doctor.Surname} {appointment.Doctor.Name} {appointment.Doctor.MiddleName}";
+                            var doctorSpec = appointment.Doctor.Specialization;
+                            var date = appointment.AppointmentDate.Date.ToString("dd.MM.yyyy");
+                            var time = appointment.AppointmentTime.ToString();
+        
+                            <div class="card-current text-light" style="width: 18rem;margin-left:40px;">
+                                <div class="card-body">
+                                    <h5 class="card-title">Date: @date<br/>Time: @time</h5>
+                                    <p class="card-text">Doctor:
+                                        <a type="button" id="details-btn" class="btn btn-sm btn-outline-light" asp-controller="Doctors"
+                                           asp-action="Details" asp-route-id="@appointment.DoctorId">
+                                            @doctorFullName
+                                        </a>
+                                    </p>
+                                    <p class="card-text">Specialization: @doctorSpec</p>
+                                    <p class="card-text">Status: In progress</p>
+                                </div>
                             </div>
-                        </div>
-                    }
-                </div>
-                <br/>
-                <hr/>
-            }
+        
+                        }
+                    </div>
+                    <br/>
+                    <hr/>
+                }
+        
+                @if (!plannedAppointments.IsNullOrEmpty())
+                {
+                    <div class="row">
+                        <h2>Planned</h2>
+                    </div>
+                    <div class="row row-cols-4 row-cols-sm-4 row-cols-md-4 g-4">
+                        @foreach (var appointment in plannedAppointments)
+                        {
+                            var doctorFullName = $"{appointment.Doctor.Surname} {appointment.Doctor.Name} {appointment.Doctor.MiddleName}";
+                            var doctorSpec = appointment.Doctor.Specialization;
+                            var date = appointment.AppointmentDate.Date.ToString("dd.MM.yyyy");
+                            var time = appointment.AppointmentTime.ToString();
+        
+                            <div class="card card-1 text-light" style="width: 18rem;margin-left:40px;">
+                                <div class="card-body">
+                                    <h5 class="card-title">Date: @date<br/>Time: @time</h5>
+                                    <p class="card-text">Doctor:
+                                        <a type="button" id="details-btn" class="btn btn-sm btn-outline-light" asp-controller="Doctors"
+                                           asp-action="Details" asp-route-id="@appointment.DoctorId">
+                                            @doctorFullName
+                                        </a>
+                                    </p>
+                                    <p class="card-text">Specialization: @doctorSpec</p>
+                                    <p class="card-text">Status: Planned</p>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                    <br/>
+                    <hr/>
+                }
+        
+                @if (!finishedAppointments.IsNullOrEmpty())
+                {
+                    <div class="row">
+                        <h2>Finished</h2>
+                    </div>
+                    <div class="row row-cols-4 row-cols-sm-4 row-cols-md-4 g-4">
+                        @foreach (var appointment in finishedAppointments)
+                        {
+                            var doctorFullName = $"{appointment.Doctor.Surname} {appointment.Doctor.Name} {appointment.Doctor.MiddleName}";
+                            var doctorSpec = appointment.Doctor.Specialization;
+                            var date = appointment.AppointmentDate.Date.ToString("dd.MM.yyyy");
+                            var time = appointment.AppointmentTime.ToString();
+        
+                            <div class="card-finished text-light" style="width: 18rem;margin-left:40px;">
+                                <div class="card-body">
+                                    <h5 class="card-title">Date: @date<br/>Time: @time</h5>
+                                    <p class="card-text">Doctor:
+                                        <a type="button" id="details-btn" class="btn btn-sm btn-outline-light" asp-controller="Doctors"
+                                           asp-action="Details" asp-route-id="@appointment.DoctorId">
+                                            @doctorFullName
+                                        </a>
+                                    </p>
+                                    <p class="card-text">Specialization: @doctorSpec</p>
+                                    <p class="card-text">Status: Finished</p>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                    <br/>
+                    <hr/>
+                }
+            </div>
+        }
+    </div>
+    <div class="user-container">
+        <div id="user-card" class="card mx-auto" style="margin-left:40px;">
+            <img class="card-img-top" src="https://thumbs.dreamstime.com/b/default-avatar-profile-vector-user-profile-default-avatar-profile-vector-user-profile-profile-179376714.jpg" alt="Card image cap">
+            <div class="card-body">
+                <h5 class="card-title">@user.FirstName @user.LastName</h5>
+                <p class="card-text">@user.Age</p>
+                <p class="card-text">@user.Email</p>
+            </div>
         </div>
-    }
+    </div>
 </div>
-
 <script src="~/js/site.js"></script>
