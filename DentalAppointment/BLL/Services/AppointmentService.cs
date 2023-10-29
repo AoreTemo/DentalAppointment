@@ -13,27 +13,27 @@ public class AppointmentService : GenericService<Appointment>, IAppointmentServi
     {
     }
 
-    public List<Core.Models.Appointment> GetPlannedAppointments()
+    public List<Core.Models.Appointment> GetPlannedAppointments(string userId)
     {
-        return GetByPredicate(filter: a => IsAppointmentPlanned(a),
+        return GetByPredicate(filter: a => a.AppUserId == userId && IsAppointmentPlanned(a),
             orderBy: appointments => appointments.OrderBy(
                     x => x.AppointmentDate + x.AppointmentTime
                 )
             );
     }
     
-    public List<Appointment>? GetCurrentAppointments()
+    public List<Appointment>? GetCurrentAppointments(string userId)
     {
-        return GetByPredicate(filter: a => IsAppointmentCurrent(a),
+        return GetByPredicate(filter: a => a.AppUserId == userId && IsAppointmentCurrent(a) ,
             orderBy: appointments => appointments.OrderBy(
                     x => x.AppointmentDate + x.AppointmentTime
                 )
             );
     }
     
-    public List<Appointment>? GetFinishedAppointments()
+    public List<Appointment>? GetFinishedAppointments(string userId)
     {
-        return GetByPredicate(filter: a => IsAppointmentFinished(a),
+        return GetByPredicate(filter: a => a.AppUserId == userId && IsAppointmentFinished(a),
             orderBy: appointments => appointments.OrderBy(
                     x => x.AppointmentDate + x.AppointmentTime
                 )
@@ -83,9 +83,9 @@ public class AppointmentService : GenericService<Appointment>, IAppointmentServi
         return query.ToList();
     }
     
-    public Appointment? GetNearestAppointment()
+    public Appointment? GetNearestAppointment(string userId)
     {
-        var appointments = GetByPredicate();
+        var appointments = GetByPredicate(a => a.AppUserId == userId);
 
         // Order the appointments by date and time.
         appointments.Sort((a, b) =>

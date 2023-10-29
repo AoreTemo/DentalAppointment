@@ -29,12 +29,12 @@ public class AccountController : Controller
     public IActionResult Info()
     {
         var userId = User.FindFirst(ClaimTypes.NameIdentifier)!.Value;
-
-        var appointments = _appointmentService.GetByPredicate(
-                a => a.AppUserId == userId
-            );
-    
-        return View(appointments);
+        var appUserInfoViewModel = new AppUserInfoViewModel
+        {
+            UserId = userId
+        };
+        
+        return View(appUserInfoViewModel);
     }
     
     // GET

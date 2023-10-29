@@ -1,8 +1,5 @@
 ﻿.login-back {
-    background-image: url();
-    background-repeat: no-repeat;
-    background-attachment: fixed;
-    background-size: cover;
+    background-color: #8b62ac;
 }
 
 .login-container {
