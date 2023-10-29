@@ -4,8 +4,8 @@
 
 .Register-container {
     max-width: 1220px;
-    margin: 100px auto;
-    padding: 0 10px;
+    margin: 0px auto;
+    padding: 100px 10px;
     display: flex;
     justify-content: center;
 }

@@ -14,24 +14,24 @@
     var finishedAppointments = AppointmentService.GetFinishedAppointments(Model.UserId);
 }
 
-<link rel="stylesheet" href="~/css/HomePage.css"/>
+<link rel="stylesheet" href="~/css/HomePage.css" />
 @if (plannedAppointments.IsNullOrEmpty() &&
-     currentAppointments.IsNullOrEmpty() &&
-     finishedAppointments.IsNullOrEmpty())
+    currentAppointments.IsNullOrEmpty() &&
+    finishedAppointments.IsNullOrEmpty())
 {
-    <div class="card text-center">
-        <div class="card-header">
-            You haven't any appointments.
+        <div class="card text-center">
+            <div class="card-header">
+                You haven't any appointments.
+            </div>
+            <div class="card-body">
+                <h5 class="card-title">Do you want to make one?</h5>
+                <p class="card-text">Go on <a asp-action="Index" asp-controller="Doctors">Doctors</a>  page -> choose the doctor you want to visit -> choose the day and the time for your future appointment :3 </p>
+                <a asp-action="Index" asp-controller="Doctors" class="btn btn-primary">Lets check the Doctors page</a>
+            </div>
+            <div class="card-footer text-muted">
+                In our clinic you will get candies 🤫
+            </div>
         </div>
-        <div class="card-body">
-            <h5 class="card-title">Do you want to make one?</h5>
-            <p class="card-text">Go on <a asp-action="Index" asp-controller="Doctors">Doctors</a>  page -> choose the doctor you want to visit -> choose the day and the time for your future appointment :3 </p>
-            <a asp-action="Index" asp-controller="Doctors" class="btn btn-primary">Lets check the Doctors page</a>
-        </div>
-        <div class="card-footer text-muted">
-            In our clinic you will get candies 🤫
-        </div>
-    </div>
 }
 else
 {
@@ -50,10 +50,11 @@ else
             <div class="row row-cols-4 row-cols-sm-4 row-cols-md-4 g-4">
                 <div class="card card-1" style="width: 18rem;margin-left:40px;">
                     <div class="card-body">
-                        <h5 class="card-title">Date: @nearesDate<br/>Time: @nearesTime</h5>
-                        <p class="card-text">Doctor:
+                        <h5 class="card-title">Date: @nearesDate<br />Time: @nearesTime</h5>
+                        <p class="card-text">
+                            Doctor:
                             <a type="button" id="details-btn" class="btn btn-sm btn-outline-light" asp-controller="Doctors"
-                               asp-action="Details" asp-route-id="@nearestAppointment.DoctorId">
+                       asp-action="Details" asp-route-id="@nearestAppointment.DoctorId">
                                 @nearestDoctorFullName
                             </a>
                         </p>
@@ -62,8 +63,8 @@ else
                     </div>
                 </div>
             </div>
-            <br/>
-            <hr/>
+            <br />
+            <hr />
         }
 
         @if (!currentAppointments.IsNullOrEmpty())
@@ -81,10 +82,11 @@ else
 
                     <div class="card-current" style="width: 18rem;margin-left:40px;">
                         <div class="card-body">
-                            <h5 class="card-title">Date: @date<br/>Time: @time</h5>
-                            <p class="card-text">Doctor:
+                            <h5 class="card-title">Date: @date<br />Time: @time</h5>
+                            <p class="card-text">
+                                Doctor:
                                 <a type="button" id="details-btn" class="btn btn-sm btn-outline-light" asp-controller="Doctors"
-                                   asp-action="Details" asp-route-id="@appointment.DoctorId">
+                       asp-action="Details" asp-route-id="@appointment.DoctorId">
                                     @doctorFullName
                                 </a>
                             </p>
@@ -95,8 +97,8 @@ else
 
                 }
             </div>
-            <br/>
-            <hr/>
+            <br />
+            <hr />
         }
 
         @if (!plannedAppointments.IsNullOrEmpty())
@@ -114,10 +116,11 @@ else
 
                     <div class="card card-1" style="width: 18rem;margin-left:40px;">
                         <div class="card-body">
-                            <h5 class="card-title">Date: @date<br/>Time: @time</h5>
-                            <p class="card-text">Doctor:
+                            <h5 class="card-title">Date: @date<br />Time: @time</h5>
+                            <p class="card-text">
+                                Doctor:
                                 <a type="button" id="details-btn" class="btn btn-sm btn-outline-light" asp-controller="Doctors"
-                                   asp-action="Details" asp-route-id="@appointment.DoctorId">
+                       asp-action="Details" asp-route-id="@appointment.DoctorId">
                                     @doctorFullName
                                 </a>
                             </p>
@@ -127,8 +130,8 @@ else
                     </div>
                 }
             </div>
-            <br/>
-            <hr/>
+            <br />
+            <hr />
         }
 
         @if (!finishedAppointments.IsNullOrEmpty())
@@ -146,10 +149,11 @@ else
 
                     <div class="card-finished" style="width: 18rem;margin-left:40px;">
                         <div class="card-body">
-                            <h5 class="card-title">Date: @date<br/>Time: @time</h5>
-                            <p class="card-text">Doctor:
+                            <h5 class="card-title">Date: @date<br />Time: @time</h5>
+                            <p class="card-text">
+                                Doctor:
                                 <a type="button" id="details-btn" class="btn btn-sm btn-outline-light" asp-controller="Doctors"
-                                   asp-action="Details" asp-route-id="@appointment.DoctorId">
+                       asp-action="Details" asp-route-id="@appointment.DoctorId">
                                     @doctorFullName
                                 </a>
                             </p>
@@ -159,11 +163,11 @@ else
                     </div>
                 }
             </div>
-            <br/>
-            <hr/>
+            <br />
+            <hr />
         }
     </div>
 }
-  
+
 
 <script src="~/js/site.js"></script>
