@@ -1,6 +1,8 @@
-﻿
-document.addEventListener("DOMContentLoaded", function () {
-    var buttonHeight = document.getElementById("details-btn").offsetHeight;
-    var customCardBody = document.getElementById("custom-card-body");
-    customCardBody.style.height = `${buttonHeight + 10}px`;
-});
+﻿const input = document.querySelector("input");
+const body = document.querySelector("header");
+
+const toggleThemeMode = () => {
+    body.classList.toggle("dark");
+};
+
+input.onchange = toggleThemeMode;
