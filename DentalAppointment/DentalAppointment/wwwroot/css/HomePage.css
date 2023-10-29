@@ -226,7 +226,7 @@
 .advantages-list{
     max-width: 1280px;
     margin: 0 auto;
-    padding: 150px 0;
+    padding: 100px 0;
 
 }
 
@@ -258,9 +258,11 @@
 
 .ad-card-1{
     background-image: url(/photos/background-card.png);
+    z-index: 3;
 }
 
 .ad-card-img {
+    border-radius: 5px;
     display: block;
     width: 100%;
     height: 200px;
