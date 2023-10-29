@@ -8,11 +8,11 @@
 <head>
     <link rel="stylesheet" href="~/css/DoctorPage.css" />
 </head>
-<h2>Doctors</h2>
+
 <div class="row row-cols-4 row-cols-sm-4 row-cols-md-4 g-4">
 @foreach (var doctor in Model)
 {
-    <div class="card card-1" style="width: 18rem;margin-left:40px;">
+    <div class="card card-doctor card-1" style="width: 18rem;margin-left:40px;">
         <img class="card-img-top" src="@doctor.ImageLink" alt="Card image cap" style="border-radius:16px; padding:10px;margin-top:10px;height:100%;object-fit:cover;">
         <div class="card-body">
             <h5 class="card-title">@doctor.Name @doctor.Surname @doctor.MiddleName</h5>

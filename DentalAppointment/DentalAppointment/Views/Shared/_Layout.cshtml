@@ -11,15 +11,14 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/DentalAppointment.styles.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/css/HomePage.css" />
+    <link rel="stylesheet" href="/css/HomePage.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Anonymous+Pro&family=Inter:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
     <header class="header">
-        <nav class="navbar navbar-expand-sm na
-vbar-toggleable-sm navbar-light bg-white border-bottom box-shadow ">
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow ">
             <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">
              <img src="/photos/Tooth.png" class="Tooth-header">
             </a>
@@ -69,9 +68,10 @@ vbar-toggleable-sm navbar-light bg-white border-bottom box-shadow ">
             </div>
         </nav>
     </header>
-    <main id="mainmain" role="main" class="pb-0">
-        @RenderBody()
-    </main>
+<main role="main" >
+    @RenderBody()
+</main>
+
     <footer class="border-top-black footer text-muted">
         <div class="container text-dark">
             &copy; 2023 - DentalAppointment - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>

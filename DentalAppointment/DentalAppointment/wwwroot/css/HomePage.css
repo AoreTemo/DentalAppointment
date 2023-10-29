@@ -85,7 +85,14 @@
     justify-self: end;
 }
 
-/*.card {
+.card {
+    border-radius: 8px;
+    transition: 0.5s ease;
+    overflow: hidden;
+    transform: translate(0);
+}
+
+.card-doctor {
     background: url("https://img.freepik.com/free-vector/gradient-trendy-background_23-2150461016.jpg") center;
     color: #ffffff;
     border-radius: 8px;
@@ -96,7 +103,7 @@
     transform: translate(0);
     display:flex;
     justify-self: center;
-}*/
+}
 
 .card::before {
     content: "";
