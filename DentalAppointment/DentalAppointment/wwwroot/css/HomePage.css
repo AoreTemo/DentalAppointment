@@ -74,6 +74,7 @@ input:checked + .slider{
 }
 .Tooth-header {
     width: 50%;
+    
 }
 
 .nav-link-but {
@@ -479,7 +480,10 @@ input:checked + .slider{
     display: flex;
     justify-content: space-evenly;
 }
-
+.logo-link {
+    display: flex;
+    justify-content: center;
+}
 .tech-title {
     font-size: 48px;
     font-family: "Anonymous Pro";

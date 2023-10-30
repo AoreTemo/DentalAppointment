@@ -35,6 +35,8 @@
         font-family: arial, sans-serif;
         border-collapse: collapse;
         width: 100%;
+        margin-bottom: 100px;
+        border: black solid 3px;
     }
 
     td, th {
@@ -301,7 +303,7 @@
 
 @if (SignInManager.IsSignedIn(User))
 {
-    <table>
+    <table >
         <tr>
                 
             @for (var i = 0; i < 7; i++)
