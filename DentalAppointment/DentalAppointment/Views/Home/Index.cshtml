@@ -6,19 +6,25 @@
     <h1 class="Gallery-title">Welcome to the Dental clinic</h1>
     <section class="Gallery">
         <div class="Gallery-item card-container">
-            <div class="card card-1">
-                <h2>Satisfied customers</h2>
-                <p class="card-info">
-                    No one from our clinic has ever left our clinic upset.
-                </p>
-                <h4>Quality</h4>
-            </div>
-            <div class="card card-2">
-                <h2>Low prices</h2>
-                <p class="card-info">
-                    The most favorable prices in the whole city
-                </p>
-                <h4>Economically</h4>
+            <div class="home-card">
+                <h2 class="home-card-title">Lets choose a doctor</h2>
+                <p class="home-card-text"></p>
+                <form asp-area="" asp-controller="Doctors" asp-action="Index" method="get">
+                <button class="home-card-btn">
+                    <div class="wrapper">
+                        Choose
+                        <i class="bi bi-send"></i>
+                    </div>
+                    <span>Doctor</span>
+                </button>
+                </form>
+                <p class="home-card-text">If you're not logged in just</p>
+                <form asp-area="" asp-controller="Account" asp-action="Login" method="get">
+                <button class="cssbuttons-io">
+                    <span> Log in</span>
+                </button>
+                </form>
+                <p class="home-card-text">don't have account? just <a class="home-card-link nav-link" asp-area="" asp-controller="Account" asp-action="Register">click it</a></p>
             </div>
         </div>
         <div class="Gallery-item Gallery-photos">
@@ -74,13 +80,13 @@
         </div>
         <div class="tech-list">
             <div class="tech-tooth">
-            <img src="~/photos/tech-2.png" class="tech-img" />
+                <img src="~/photos/tech-2.png" class="tech-img" />
                 <p class="tech-text text-2">PEEL-AND-STICK TREATMENT</p>
-        </div>
-        <div class="tech-micr">
-            <img src="~/photos/tech-3.png" class="tech-img" />
+            </div>
+            <div class="tech-micr">
+                <img src="~/photos/tech-3.png" class="tech-img" />
                 <p class="tech-text">DENTAL MICROSCOPE</p>
-        </div>
+            </div>
         </div>
     </section>
 </main>
